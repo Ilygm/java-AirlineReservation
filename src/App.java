@@ -1,15 +1,14 @@
-import java.util.ArrayList;
 import java.util.Scanner;
 import java.util.concurrent.TimeUnit;
 
 public class App {
+
     public static void main(String[] args) {
         DataBase db = new DataBase();
-
-        ArrayList<Flight> flights = new ArrayList<>();
-        ArrayList<User> users = new ArrayList<>();
-        ArrayList<User> admins = new ArrayList<>();
-        admins.add(new User("Admin", "Admin"));
+        // DEFAULT VALUES FOR DEBUGGING AND TESTING
+        db.admins.add(new User("Admin", "Admin", Integer.MAX_VALUE));
+        db.flights.add(new Flight("WX-22", "Yazd", "Tehran"));
+        db.flights.add(new Flight("WX-25", "Tehran", "Yazd"));
 
         int option = 1;
         while (option != 0) {
@@ -19,18 +18,12 @@ public class App {
             switch (option) {
                 case 1 -> {
                     clearScreen();
-                    for (User user : users) {
-                        System.out.println(user.getUsername() + "|||" + user.getPassword() + "|||" + user.getBalance());
+                    for (User user : db.users) {
+                        System.out.printf("%-10s | %-10s | %-10s\n", user.getUsername(), user.getPassword(), user.getBalance());
                     }
-                    for (int i = 0; i < 5; i++) {
-                        rest();
-                    }
+                    for (int i = 0; i < 5; i++) rest();
                 }
-                case 2 -> {
-                    User tempUser = db.makeNewUser(users);
-                    db.chargeAccount(tempUser);
-                    users.add(tempUser);
-                }
+                case 2 -> db.users.add(new User(db.users));
                 case 0 -> {}
                 default -> {
                     System.out.print("\t\t\t\t\t\t     !! Invalid Input !!");
@@ -41,6 +34,9 @@ public class App {
         }
     }
 
+    /**
+     * Main-menu's art
+     */
     public static void printMenu() {
         System.out.print("""
                                         d8888 d8b         888 d8b                       8888888b.                                                       888    d8b                  \s
@@ -52,8 +48,8 @@ public class App {
                                   d8888888888 888 888     888 888 888  888 Y8b.         888  T88b  Y8b.          X88 Y8b.     888      Y8bd8P  888  888 Y88b.  888 Y88..88P 888  888\s
                                  d88P     888 888 888     888 888 888  888  "Y8888      888   T88b  "Y8888   88888P'  "Y8888  888       Y88P   "Y888888  "Y888 888  "Y88P"  888  888\s
 
-                                                                                    | _______  ______ __   __ _     _ |                                                               \s
-                                                                                    | |  |  | |______ | \\\\  | |     | |                                                             \s
+                                                                                    | _______  ______ __   __ _     _ |
+                                                                                    | |  |  | |______ | \\\\  | |     | |
                                                                                     | |  |  | |______ |  \\\\_| |_____| |
                                                                                     |                                 |
                                                                                                1 - Sign in
