@@ -1,6 +1,6 @@
 ## What is this project?
 
-This project aims to simlulate a terminal-based airline reservation system.
+This project aims to simulate a terminal-based airline reservation system.
 
 ## How to play
 
