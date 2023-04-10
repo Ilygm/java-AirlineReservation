@@ -1,44 +1,16 @@
 public class Flight {
-    private final String flightID, origin, destination;
-    private String date;
-    private int time, price, availableSeats;
+    private final String flightID, origin, destination, date;
+    private final short time;
+    private short availableSeats;
+    private int price;
 
-    public Flight(String flightID, String origin, String destination) {
+    public Flight(String flightID, String origin, String destination,String date,short time, short availableSeats) {
         this.flightID = flightID;
         this.origin = origin;
         this.destination = destination;
-    }
-
-    public int getAvailableSeats() {
-        return availableSeats;
-    }
-
-    public void setAvailableSeats(int availableSeats) {
-        this.availableSeats = availableSeats;
-    }
-
-    public int getPrice() {
-        return price;
-    }
-
-    public void setPrice(int price) {
-        this.price = price;
-    }
-
-    public int getTime() {
-        return time;
-    }
-
-    public void setTime(int time) {
-        this.time = time;
-    }
-
-    public String getDate() {
-        return date;
-    }
-
-    public void setDate(String date) {
         this.date = date;
+        this.time = time;
+        this.availableSeats = availableSeats;
     }
 
     public String getFlightID() {
@@ -53,4 +25,26 @@ public class Flight {
         return destination;
     }
 
+    public int getAvailableSeats() {
+        return availableSeats;
+    }
+    public void setAvailableSeats(short availableSeats) {
+        this.availableSeats = availableSeats;
+    }
+
+    public String getDate() {
+        return date;
+    }
+
+    public short getTime() {
+        return time;
+    }
+
+    public int getPrice() {
+        return price;
+    }
+
+    public void setPrice(int price) {
+        this.price = price;
+    }
 }

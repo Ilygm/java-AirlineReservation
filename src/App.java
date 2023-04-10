@@ -6,9 +6,9 @@ public class App {
     public static void main(String[] args) {
         DataBase db = new DataBase();
         // DEFAULT VALUES FOR DEBUGGING AND TESTING
-        db.admins.add(new User("Admin", "Admin", Integer.MAX_VALUE));
-        db.flights.add(new Flight("WX-22", "Yazd", "Tehran"));
-        db.flights.add(new Flight("WX-25", "Tehran", "Yazd"));
+        db.admins.add(new User("Admin", "Admin"));
+        db.flights.add(new Flight("WX-22", "Yazd", "Tehran", "20-02-22", ((short) 1400), ((short) 250)));
+        db.flights.add(new Flight("WX-45", "Tehran", "Yazd", "30-02-22", ((short) 2400), ((short) 250)));
 
         int option = -1;
         while (option != 0) {

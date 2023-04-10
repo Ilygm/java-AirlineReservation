@@ -26,8 +26,8 @@ public class DataBase {
                                       %56c >>""" + ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ');
             option = App.getIntInput();
             switch (option) {
-                case 1 -> searchList(admins);
-                case 2 -> searchList(users);
+                case 1 -> searchList(admins, true);
+                case 2 -> searchList(users, false);
                 case 0 -> {
                 }
                 default -> App.invalidInput();
@@ -35,7 +35,51 @@ public class DataBase {
         }
     }
 
-    private void searchList(ArrayList<User> list) {
+    private void adminPanel(User admin) {
+        Scanner scanner = new Scanner(System.in);
+        App.clearScreen();
+        int option = -1;
+        while (option != 0) {
+            printAdminPanel(admin.getUsername());
+            option = App.getIntInput();
+            switch (option) {
+                case 6 -> {
+                    System.out.printf("\n%56cYou're about to change your password\n%56cEnter your current password: ", ' ', ' ');
+                    String tempPass = scanner.next();
+                    if (tempPass.equals(admin.getPassword())) admin.setPassword();
+                    else System.out.printf("%56c    \033[0;31m!! Access denied !!\033[0m\n\n", ' ');
+                }
+                case 0 -> {
+                }
+                default -> App.invalidInput();
+            }
+            App.clearScreen();
+        }
+    }
+
+    private void printAdminPanel(String name) {
+        System.out.printf("""
+                                  %50c-------------------------------------------------
+                                  %50c|                                               |
+                                  %50c|                Welcome Boss                   |
+                                  %50c|        You are logged in as: %-17s|
+                                  %50c-------------------------------------------------
+                                                  
+                                  %50c         1 - Add flight
+                                                  
+                                  %50c         2 - Update flight
+                                                  
+                                  %50c         3 - Remove flight
+                                                      
+                                  %50c         4 - Schedules
+                                                      
+                                  %50c         6 - Change password
+                                                      
+                                  %50c         0 - Sign out
+                                  %50c>>""" + ' ', ' ', ' ', ' ', ' ', name, ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ');
+    }
+
+    private void searchList(ArrayList<User> list, boolean isAdmin) {
         Scanner scanner = new Scanner(System.in);
         System.out.printf("\n%56cEnter your username:\033[1;36m ", ' ');
         String username = scanner.next();
@@ -47,9 +91,10 @@ public class DataBase {
             if (password.length() >= 4) {
                 for (User user : list) {
                     if (user.getUsername().equals(username) && user.getPassword().equals(password)) {
-                        System.out.printf("%60c Welcome %s !!", ' ', username);
+                        System.out.printf("%60c\033[1;32m!! Welcome %s !!\033[0m", ' ', username);
                         App.rest();
-                        userPanel(user);
+                        if (isAdmin) adminPanel(user);
+                        else userPanel(user);
                         return;
                     }
                 }

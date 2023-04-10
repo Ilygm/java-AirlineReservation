@@ -1,29 +1,19 @@
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.Scanner;
 
 public class User {
     private String username, password;
     private int balance = 0;
-    private HashSet<String> flightIDs = new HashSet<>();
 
-    public User(String username, String password, int balance) {
+    public User(String username, String password) {
         this.username = username;
         this.password = password;
-        this.balance = balance;
+        this.balance = Integer.MAX_VALUE;
     }
 
     public User(ArrayList<User> users) {
         makeNewUser(users);
         chargeAccount();
-    }
-
-    public void addFlight(String flightID) {
-        flightIDs.add(flightID);
-    }
-
-    public void removeFlight(String flightID) {
-        flightIDs.remove(flightID);
     }
 
     public String getUsername() {
