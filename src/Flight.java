@@ -4,13 +4,14 @@ public class Flight {
     private int price;
     private short time;
 
-    public Flight(String flightID, String origin, String destination, String date, short time, short availableSeats) {
+    public Flight(String flightID, String origin, String destination, String date,int time,int availableSeats, int price) {
         this.flightID = flightID;
         this.origin = origin;
         this.destination = destination;
         this.date = date;
-        this.time = time;
-        this.availableSeats = availableSeats;
+        this.time = (short)time;
+        this.availableSeats = (short) availableSeats;
+        this.price = price;
     }
 
     public String getFlightID() {
@@ -21,56 +22,28 @@ public class Flight {
         this.flightID = flightID;
     }
 
-    public String getOrigin() {
-        return origin;
-    }
-
     public void setOrigin(String origin) {
         this.origin = origin;
-    }
-
-    public String getDestination() {
-        return destination;
     }
 
     public void setDestination(String destination) {
         this.destination = destination;
     }
 
-    public int getAvailableSeats() {
-        return availableSeats;
-    }
-
-    public void setAvailableSeats(short availableSeats) {
-        this.availableSeats = availableSeats;
-    }
-
-    public String getDate() {
-        return date;
+    public void setAvailableSeats(int availableSeats) {
+        this.availableSeats = (short )availableSeats;
     }
 
     public void setDate(String date) {
         this.date = date;
     }
 
-    public short getTime() {
-        return time;
-    }
-
-    public void setTime(short time) {
-        this.time = time;
-    }
-
-    public int getPrice() {
-        return price;
-    }
-
-    public void setPrice(int price) {
-        this.price = price;
+    public void setTime(int time) {
+        this.time = (short)time;
     }
 
     @Override
     public String toString() {
-        return String.format(" %-4s | %-10s | %-10s | %-10s | %-10s | %-10d_", flightID, origin, destination, date, price);
+        return String.format(" %-4s | %-10s | %-10s | %-10s | %-10d_ | %4d | %5d_", flightID, origin, destination, date, price, time, availableSeats);
     }
 }

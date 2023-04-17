@@ -2,15 +2,8 @@ import java.util.Scanner;
 import java.util.concurrent.TimeUnit;
 
 public class App {
-
     public static void main(String[] args) {
         DataBase db = new DataBase();
-        // DEFAULT VALUES FOR DEBUGGING AND TESTING
-        db.admins.put("Admin".toLowerCase(), new User("Admin", "Admin"));
-        db.flights.put("WX-22", new Flight("WX-22", "Yazd", "Tehran", "20-02-22", ((short) 1400), ((short) 250)));
-        db.flights.put("WX-45", new Flight("WX-45", "Tehran", "Yazd", "30-02-22", ((short) 2400), ((short) 250)));
-        db.flights.put("WX-65", new Flight("WX-65", "Tehran", "Mashhad", "30-08-22", ((short) 0), ((short) 600)));
-
         int option = -1;
         while (option != 0) {
             clearScreen();
@@ -18,9 +11,8 @@ public class App {
             option = getIntInput();
             switch (option) {
                 case 1 -> db.signInPage();
-                case 2 -> new User(db.users);
-                case 0 -> {
-                }
+                case 2 -> db.makeNewUser();
+                case 0 -> {/* Nothing :) */}
                 default -> invalidInput();
             }
         }
@@ -29,7 +21,7 @@ public class App {
     /**
      * Main-menu's art
      */
-    public static void printMenu() {
+    private static void printMenu() {
         System.out.print("""
                                                                   
                                         d8888 d8b         888 d8b                       8888888b.                                                       888    d8b                  \s
@@ -78,9 +70,12 @@ public class App {
         }
     }
 
+    /**
+     * Just making things are easier
+     */
     public static void invalidInput() {
         System.out.printf("%64c\033[0;31m!! Invalid Input !!\033[0m", ' ');
-        App.rest();
+        rest();
     }
 
     /**

@@ -1,22 +1,11 @@
-import java.util.HashMap;
-import java.util.Scanner;
-
-record Ticket(String flightID,String ticketID){}
-
 public class User {
-    HashMap<String, String> tickets = new HashMap<>();
-    private String username, password;
+    private final String username;
+    private String password;
     private int balance = 0;
+
     public User(String username, String password) {
         this.username = username;
         this.password = password;
-        this.balance = Integer.MAX_VALUE;
-    }
-
-    public User(HashMap<String, User> users) {
-        makeNewUser(users);
-        chargeAccount();
-        users.put(username.toLowerCase(), this);
     }
 
     public String getUsername() {
@@ -27,100 +16,15 @@ public class User {
         return password;
     }
 
+    public void setPassword(String password) {
+        this.password = password;
+    }
+
     public int getBalance() {
         return balance;
     }
 
-    private void makeNewUser(HashMap<String, User> users) {
-        Scanner scanner = new Scanner(System.in);
-        App.clearScreen();
-        System.out.printf("""
-                                  %56c-----------------------------
-                                  %56c|                           |
-                                  %56c|      \033[1;36mNew user signup\033[0m      |
-                                  %56c|                           |
-                                  %56c-----------------------------
-                                                                    
-                                  %56c  [ \033[4;37mUsername Requirements\033[0m ]
-                                                                    
-                                  %56c- At least choose 4 letters.
-                                                                    
-                                  %56c- It can't start with a number.
-                                                                    
-                                  %56cEnter your Username >>""" + "\033[1;36m ", ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ');
-        username = scanner.next();
-        while (true) {
-            if (users.containsKey(username)) {
-                System.out.printf("%47c\033[0;31m    !! Current username is used, try again !!\033[0m\n\n%56cEnter a new username >> \033[1;36m ", ' ', ' ');
-                username = scanner.next();
-                continue;
-            }
-            break;
-        }
-        while (!(username.matches("^[a-zA-Z]\\w*$")) || username.length() < 4) {
-            System.out.printf("%56c\033[0m    !! Username is not acceptable ( %s )!!\n%56cEnter another username >> \033[1;36m ", ' ', ("\033[0;31m" + username + "\033[0m"), ' ');
-            username = scanner.next();
-        }
-        setPassword();
-        System.out.printf("\n%45c\033[0m    \033[1;32m!! Your account has been successfully created !!\033[0m ", ' ');
-        App.rest();
-    }
-
-    public void chargeAccount() {
-        boolean notDone = true;
-        while (notDone) {
-            App.clearScreen();
-            System.out.printf("""
-                                      %54c----------------------------------------
-                                      %54c|                                      |
-                                      %54c|       Welcome    :  \033[1;34m%-10s\033[0m       |
-                                      %54c|                                      |
-                                      %54c|  Your balance is :  \033[0;32m%,-7d$\033[0m         |
-                                      %54c|                                      |
-                                      %54c----------------------------------------
-                                                                            
-                                      %51cWould you like to add balance to your account?
-                                                                            
-                                      %67c1 - Sure
-                                                                            
-                                      %67c0 - I will do it later
-                                                                            
-                                      %54c>>""" + ' ', ' ', ' ', ' ', username, ' ', ' ', balance, ' ', ' ', ' ', ' ', ' ', ' ');
-            int option = App.getIntInput();
-            switch (option) {
-                case 1 -> {
-                    int charged;
-                    System.out.printf("\n\n%55cHow much would you like to charge? \n%60c[ Current balance: \033[0;32m%,d\033[0m ]\n\n%54c>> ", ' ', ' ', balance, ' ');
-                    charged = App.getIntInput();
-                    while (charged <= 0) {
-                        System.out.printf("%68c!! Wrong input try again !!\n%54c>> ", ' ', ' ');
-                        App.rest();
-                        charged = App.getIntInput();
-                    }
-                    balance += charged;
-                }
-                case 0 -> notDone = false;
-                default -> App.invalidInput();
-            }
-        }
-    }
-
-    public void setPassword() {
-        Scanner scanner = new Scanner(System.in);
-        System.out.printf("""
-                                  \033[0m
-                                  %54c    [ \033[4;37mPassword Requirements\033[0m ]
-                                                                   
-                                  %54c  - It should only contain ( a - z | A - Z | 0 - 9 | _ ).
-                                                                   
-                                  %54c  - It should be longer than 4 charecters.
-                                                                   
-                                  %54c  Enter your password >>""" + "\033[0;36m ", ' ', ' ', ' ', ' ');
-        password = scanner.next();
-        while (!(username.matches("^\\w*$")) || password.length() < 5) {
-            System.out.printf("%54c\033[0m   !! Password is not acceptable ( %s ) !!\n%54cEnter another password >> \033[0;36m ", ' ', ("\033[1;31m" + password + "\033[0m"), ' ');
-            password = scanner.next();
-        }
-        System.out.print("\033[0m");
+    public void addBalance(int balance) {
+        this.balance += balance;
     }
 }
