@@ -1,10 +1,10 @@
-import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Scanner;
 
 public class DataBase {
-    public ArrayList<Flight> flights = new ArrayList<>();
-    public ArrayList<User> users = new ArrayList<>();
-    public ArrayList<User> admins = new ArrayList<>();
+    public HashMap<String, User> admins = new HashMap<>();
+    public HashMap<String, User> users = new HashMap<>();
+    public HashMap<String, Flight> flights = new HashMap<>();
 
     public void signInPage() {
         int option = -1;
@@ -36,6 +36,7 @@ public class DataBase {
     }
 
     private void adminPanel(User admin) {
+        AdminControl adminControl = new AdminControl(flights);
         Scanner scanner = new Scanner(System.in);
         App.clearScreen();
         int option = -1;
@@ -43,7 +44,9 @@ public class DataBase {
             printAdminPanel(admin.getUsername());
             option = App.getIntInput();
             switch (option) {
-                case 6 -> {
+                case 1 -> adminControl.addFlight();
+                case 4 -> adminControl.showFlights();
+                case 5 -> {
                     System.out.printf("\n%56cYou're about to change your password\n%56cEnter your current password: ", ' ', ' ');
                     String tempPass = scanner.next();
                     if (tempPass.equals(admin.getPassword())) admin.setPassword();
@@ -63,6 +66,7 @@ public class DataBase {
                                   %50c|                                               |
                                   %50c|                Welcome Boss                   |
                                   %50c|        You are logged in as: %-17s|
+                                  %50c|                                               |
                                   %50c-------------------------------------------------
                                                   
                                   %50c         1 - Add flight
@@ -71,32 +75,30 @@ public class DataBase {
                                                   
                                   %50c         3 - Remove flight
                                                       
-                                  %50c         4 - Schedules
+                                  %50c         4 - Current schedules
                                                       
-                                  %50c         6 - Change password
+                                  %50c         5 - Change password
                                                       
                                   %50c         0 - Sign out
-                                  %50c>>""" + ' ', ' ', ' ', ' ', ' ', name, ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ');
+                                  %50c>>""" + ' ', ' ', ' ', ' ', ' ', name, ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ');
     }
 
-    private void searchList(ArrayList<User> list, boolean isAdmin) {
+    private void searchList(HashMap<String, User> list, boolean isAdmin) {
         Scanner scanner = new Scanner(System.in);
         System.out.printf("\n%56cEnter your username:\033[1;36m ", ' ');
         String username = scanner.next();
         System.out.printf("\n%56c\033[0mEnter your password:\033[0;36m ", ' ');
         String password = scanner.next();
         System.out.println("\033[0m");
-
+        username = username.toLowerCase();
         if (username.matches("^[a-zA-Z]\\w*$") && username.length() > 4) {
-            if (password.length() >= 4) {
-                for (User user : list) {
-                    if (user.getUsername().equals(username) && user.getPassword().equals(password)) {
-                        System.out.printf("%60c\033[1;32m!! Welcome %s !!\033[0m", ' ', username);
-                        App.rest();
-                        if (isAdmin) adminPanel(user);
-                        else userPanel(user);
-                        return;
-                    }
+            if (password.length() >= 4 && list.containsKey(username)) {
+                if (list.get(username).getPassword().equals(password)) {
+                    System.out.printf("%60c\033[1;32m!! Welcome %s !!\033[0m", ' ', username);
+                    App.rest();
+                    if (isAdmin) adminPanel(list.get(username));
+                    else userPanel(list.get(username));
+                    return;
                 }
             }
         }

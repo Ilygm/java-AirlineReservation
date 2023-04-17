@@ -1,19 +1,22 @@
-import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Scanner;
 
+record Ticket(String flightID,String ticketID){}
+
 public class User {
+    HashMap<String, String> tickets = new HashMap<>();
     private String username, password;
     private int balance = 0;
-
     public User(String username, String password) {
         this.username = username;
         this.password = password;
         this.balance = Integer.MAX_VALUE;
     }
 
-    public User(ArrayList<User> users) {
+    public User(HashMap<String, User> users) {
         makeNewUser(users);
         chargeAccount();
+        users.put(username.toLowerCase(), this);
     }
 
     public String getUsername() {
@@ -28,7 +31,7 @@ public class User {
         return balance;
     }
 
-    private void makeNewUser(ArrayList<User> users) {
+    private void makeNewUser(HashMap<String, User> users) {
         Scanner scanner = new Scanner(System.in);
         App.clearScreen();
         System.out.printf("""
@@ -46,17 +49,13 @@ public class User {
                                                                     
                                   %56cEnter your Username >>""" + "\033[1;36m ", ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ');
         username = scanner.next();
-        boolean isDuplicate = true;
-        while (isDuplicate) {
-            isDuplicate = false;
-            for (User user : users) {
-                if (user.getUsername().equalsIgnoreCase(username)) {
-                    System.out.printf("%47c\033[0;31m    !! Current username is used, try again !!\033[0m\n\n%56cEnter a new username >> \033[1;36m ", ' ', ' ');
-                    username = scanner.next();
-                    isDuplicate = true;
-                    break;
-                }
+        while (true) {
+            if (users.containsKey(username)) {
+                System.out.printf("%47c\033[0;31m    !! Current username is used, try again !!\033[0m\n\n%56cEnter a new username >> \033[1;36m ", ' ', ' ');
+                username = scanner.next();
+                continue;
             }
+            break;
         }
         while (!(username.matches("^[a-zA-Z]\\w*$")) || username.length() < 4) {
             System.out.printf("%56c\033[0m    !! Username is not acceptable ( %s )!!\n%56cEnter another username >> \033[1;36m ", ' ', ("\033[0;31m" + username + "\033[0m"), ' ');

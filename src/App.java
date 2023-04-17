@@ -6,9 +6,10 @@ public class App {
     public static void main(String[] args) {
         DataBase db = new DataBase();
         // DEFAULT VALUES FOR DEBUGGING AND TESTING
-        db.admins.add(new User("Admin", "Admin"));
-        db.flights.add(new Flight("WX-22", "Yazd", "Tehran", "20-02-22", ((short) 1400), ((short) 250)));
-        db.flights.add(new Flight("WX-45", "Tehran", "Yazd", "30-02-22", ((short) 2400), ((short) 250)));
+        db.admins.put("Admin".toLowerCase(), new User("Admin", "Admin"));
+        db.flights.put("WX-22", new Flight("WX-22", "Yazd", "Tehran", "20-02-22", ((short) 1400), ((short) 250)));
+        db.flights.put("WX-45", new Flight("WX-45", "Tehran", "Yazd", "30-02-22", ((short) 2400), ((short) 250)));
+        db.flights.put("WX-65", new Flight("WX-65", "Tehran", "Mashhad", "30-08-22", ((short) 0), ((short) 600)));
 
         int option = -1;
         while (option != 0) {
@@ -16,12 +17,10 @@ public class App {
             printMenu();
             option = getIntInput();
             switch (option) {
-                case 1 -> {
-                    clearScreen();
-                    db.signInPage();
+                case 1 -> db.signInPage();
+                case 2 -> new User(db.users);
+                case 0 -> {
                 }
-                case 2 -> db.users.add(new User(db.users));
-                case 0 -> {}
                 default -> invalidInput();
             }
         }
@@ -32,7 +31,7 @@ public class App {
      */
     public static void printMenu() {
         System.out.print("""
-                                 
+                                                                  
                                         d8888 d8b         888 d8b                       8888888b.                                                       888    d8b                  \s
                                        d88888 Y8P         888 Y8P                       888   Y88b                                                      888    Y8P                  \s
                                       d88P888             888                           888    888                                                      888                         \s
@@ -78,7 +77,8 @@ public class App {
             return -25;
         }
     }
-    public static void invalidInput(){
+
+    public static void invalidInput() {
         System.out.printf("%64c\033[0;31m!! Invalid Input !!\033[0m", ' ');
         App.rest();
     }
@@ -88,7 +88,7 @@ public class App {
      */
     public static void rest() {
         try {
-            TimeUnit.MILLISECONDS.sleep(1500);
+            TimeUnit.MILLISECONDS.sleep(1750);
         } catch (InterruptedException e) {
             System.err.println("!! Program was interrupted !!");
         }
