@@ -1,9 +1,9 @@
 public class Flight {
+    public boolean isModified = false;
     private String flightID, origin, destination, date;
     private int availableSeats;
     private int time;
     private int price;
-    public boolean isModified = false;
 
     public Flight(String flightID, String origin, String destination, String date, int time, int availableSeats, int price) {
         this.flightID = flightID;
@@ -43,10 +43,6 @@ public class Flight {
         return date;
     }
 
-    public void setAvailableSeats(int availableSeats) {
-        this.availableSeats = availableSeats;
-    }
-
     public void setDate(String date) {
         this.date = date;
     }
@@ -61,6 +57,10 @@ public class Flight {
 
     public int getAvailableSeats() {
         return availableSeats;
+    }
+
+    public void setAvailableSeats(int availableSeats) {
+        this.availableSeats = availableSeats;
     }
 
     public void reduceAvailableSeats(int byAmount) {
@@ -98,6 +98,6 @@ public class Flight {
 
     @Override
     public String toString() {
-        return String.format("%31c %-4s | %-15s | %-15s | %-10s | %,-10d |  %-5s | %,5d\n", ' ', flightID, origin, destination, date, price, turnTimeToString(time), availableSeats);
+        return String.format("%31c %-4s | %-15s | %-15s | %-10s | %,-10d |  %-5s  | %,5d\n", ' ', flightID, origin, destination, date, price, turnTimeToString(time), availableSeats);
     }
 }

@@ -6,12 +6,14 @@ public class DataBase {
     private final Flights flights = new Flights();
 
     {
-        flights.flightsDB.put("FA-17", new Flight("FA-17", "Yazd", "Shiraz", "1401-12-10", 1230, 500, 100_000));
+        flights.flightsDB.put("FA-17", new Flight("FA-17", "Yazd", "Shiraz", "1401-12-10", 1230, 0, 100_000));
         flights.flightsDB.put("TA-55", new Flight("TA-55", "Tehran", "Isfahan", "1401-10-10", 2359, 600, 100_000));
         flights.flightsDB.put("GG-55", new Flight("GG-55", "Yazd", "Tehran", "1401-12-10", 2359, 600, 200_000));
         flights.flightsDB.put("SS-55", new Flight("SS-55", "Mashhad", "Kerman", "1402-12-10", 2000, 600, 500_000));
         flights.flightsDB.put("AA-55", new Flight("AA-55", "Yazd", "Kerman", "1400-05-20", 200, 600, 10_000));
-        flights.flightsDB.put("AA-46", new Flight("AA-23", "Isfahan", "Tehran", "1400-06-20", 500, 600, 100_000));
+        flights.flightsDB.put("AA-46", new Flight("AA-46", "Isfahan", "Tehran", "1400-06-20", 500, 600, 100_000));
+        flights.flightsDB.put("AA-14", new Flight("AA-14", "Germany", "Iran", "1402-10-20", 900, 0, 100_000));
+        flights.flightsDB.put("AA-41", new Flight("AA-41", "Iran", "Germany", "1402-10-20", 300, 1, 100_000));
         users.addUser("test", "test");
         users.usersDB.get("test").changeBalance(200_000_000);
     }
@@ -23,7 +25,7 @@ public class DataBase {
             System.out.printf("""
                                       %56c-------------------------
                                       %56c|                       |
-                                      %56c|       %s sign in%s        |
+                                      %56c|       %s Sign in%s        |
                                       %56c|                       |
                                       %56c-------------------------
                                       %56c
@@ -54,7 +56,7 @@ public class DataBase {
         if (users.isUserPassCorrect(username, password)) {
             new UserPanel(users.usersDB.get(username), flights);
         } else {
-            System.out.printf("%40c!! Either your username ( %s ) or password ( %s ) is wrong !!", ' ', CColors.RED + username + CColors.RESET, CColors.RED + password + CColors.RED);
+            System.out.printf("%40c!! Either your username ( %s ) or password ( %s ) is wrong !!", ' ', CColors.RED + username + CColors.RESET, CColors.RED + password + CColors.RESET);
             App.rest();
         }
     }
@@ -101,7 +103,7 @@ public class DataBase {
                                                                    
                                   %54c  - It should only contain ( a - z | A - Z | 0 - 9 | _ ).
                                                                    
-                                  %54c  - It should be longer than 4 charecters.
+                                  %54c  - It should be longer than 4 characters.
                                                                    
                                   %54c  Enter your password >>""" + CColors.CYAN + ' ', CColors.RESET, ' ', CColors.WHITE, CColors.RESET, ' ', ' ', ' ');
         tempPass = scanner.next();

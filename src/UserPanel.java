@@ -29,7 +29,7 @@ public class UserPanel {
         }
     }
 
-    private static void chargeAccount(User user) {
+    private void chargeAccount(User user) {
         int charged;
         System.out.printf("\n\n%55cHow much would you like to charge? \n%60c[ Current balance: %s%,d%s ]\n\n%54c>> ", ' ', ' ', CColors.GREEN, user.getBalance(), CColors.RESET, ' ');
         charged = App.getIntInput();

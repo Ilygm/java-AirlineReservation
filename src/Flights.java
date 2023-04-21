@@ -22,13 +22,13 @@ public class Flights {
 
     public void showAllFlights() {
         App.clearScreen();
-        System.out.printf("%31c   ID  |      Origin     |   Destination   |    Date    |    Price   |  Time  | Seats \n\n", ' ');
+        System.out.printf("%31c   ID  |      Origin     |   Destination   |    Date    |    Price    |  Time  | Seats \n\n", ' ');
         flightsDB.values().forEach(System.out::print);
     }
 
     public void printSelectedFlights(ArrayList<Flight> flights) {
         App.clearScreen();
-        System.out.printf("%31c   ID  |      Origin     |   Destination   |    Date    |    Price   |  Time  | Seats \n\n", ' ');
+        System.out.printf("%31c   ID  |      Origin     |   Destination   |    Date    |    Price    |  Time  | Seats \n\n", ' ');
         flights.forEach(System.out::print);
         if (flights.size() == 0) {
             System.out.printf("%50c%s!! No flights available !!%s", ' ', CColors.RED, CColors.RESET);
