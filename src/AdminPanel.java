@@ -29,7 +29,7 @@ public class AdminPanel {
 
     private void addFlight() {
         App.clearScreen();
-        Flight tempFlight = new Flight(null, null, null, null, "00:00", 0, 0);
+        Flight tempFlight = new Flight(null, null, null, null, 0, 0, 0);
         System.out.printf("""
                                   %55c--------------------------------
                                   %55c|                              |
@@ -44,22 +44,22 @@ public class AdminPanel {
             tempString = getStringX("flightID (exp. EX-22, WG-45)");
         }
         tempFlight.setFlightID(tempString);
-        tempFlight.setOrigin(getStringX("origin"));
-        tempFlight.setDestination(getStringX("destination"));
+        tempFlight.setOrigin((getStringX("origin")));
+        tempFlight.setDestination((getStringX("destination")));
         tempString = getStringX("date (exp. yyyy-mm-dd)");
         while (!tempString.matches("^\\d\\d\\d\\d-\\d\\d-\\d\\d$")) {
             System.out.printf("%50c  \033[0;31m! Provided date is incorrect !\033[0m\n", ' ');
             tempString = getStringX("date (exp. yyyy-mm-dd)");
         }
         tempFlight.setDate(tempString);
-        tempString = getStringX("departure time (exp. 12:00, 24:00)");
-        while (!tempString.matches("^\\d\\d:\\d\\d$")) {
+        int tempTime = getIntX("departure time (exp. 1200, 2400)");
+        while (tempTime > 2400) {
             System.out.printf("%50c  \033[0;31m! Provided time is incorrect !\033[0m\n", ' ');
-            tempString = getStringX("departure time (exp. 1200, 2400)");
+            tempTime = getIntX("departure time (exp. 1200, 2400)");
         }
-        tempFlight.setTime(tempString);
-        tempFlight.setPrice(setIntX("price"));
-        tempFlight.setAvailableSeats(setIntX("seat"));
+        tempFlight.setTime(tempTime);
+        tempFlight.setPrice(getIntX("price"));
+        tempFlight.setAvailableSeats(getIntX("seat"));
         flights.addFLight(tempFlight);
         System.out.printf("\n%56c\033[0;32m!!    Your flight has been added      !!\033[0m", ' ');
         if (scanner.hasNextLine()) scanner.nextLine();
@@ -78,12 +78,15 @@ public class AdminPanel {
             switch (option) {
                 case 1 -> flights.getFlight(tempFlightID).setOrigin(getStringX("new origin"));
                 case 2 -> flights.getFlight(tempFlightID).setDestination(getStringX("new destination"));
-                case 3 -> {
-                    System.out.printf("%50cProvide the new price: %s", ' ', CColors.CYAN);
-                    flights.getFlight(tempFlightID).setPrice(setIntX("price"));
-                }
+                case 3 -> flights.getFlight(tempFlightID).setPrice(getIntX("new price"));
                 case 4 -> flights.getFlight(tempFlightID).setDate(getStringX("new date"));
-                case 5 -> flights.getFlight(tempFlightID).setTime(getStringX("new time"));
+                case 5 -> {
+                    int tempTime;
+                    while ((tempTime = getIntX("new time")) > 2400) {
+                        System.out.printf("%60c%s!! Given value is incorrect !!%s", ' ', CColors.RED, CColors.RESET);
+                    }
+                    flights.getFlight(tempFlightID).setTime(tempTime);
+                }
                 default -> App.printInvalidInput();
             }
             if (scanner.hasNextLine()) scanner.nextLine();
@@ -152,14 +155,14 @@ public class AdminPanel {
         return text;
     }
 
-    private int setIntX(String text) {
+    private int getIntX(String text) {
         do {
             System.out.printf("\n%50c Enter the %s: %s", ' ', text, CColors.CYAN);
             int newValue = App.getIntInput();
             System.out.printf(CColors.RESET);
             if (newValue > 0) return newValue;
             else {
-                System.out.printf("%60c%s!! Given value cannot be negative !!", ' ', CColors.RED);
+                System.out.printf("%60c%s!! Given value cannot be negative !!%s", ' ', CColors.RED, CColors.RESET);
                 App.rest();
             }
         } while (true);

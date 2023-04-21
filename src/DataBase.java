@@ -6,11 +6,13 @@ public class DataBase {
     private final Flights flights = new Flights();
 
     {
-        flights.flightsDB.put("FA-17", new Flight("FA-17", "Yazd", "Shiraz", "1401-12-10", "12:30", 500, 100_000));
-        flights.flightsDB.put("TA-55", new Flight("TA-55", "Yazd", "Isfahan", "1401-10-10", "23:59", 600, 100_000));
-        flights.flightsDB.put("GG-55", new Flight("GG-55", "Yazd", "Tehran", "1401-12-10", "23:59", 600, 200_000));
-        flights.flightsDB.put("SS-55", new Flight("SS-55", "Yazd", "Mashhad", "1402-12-10", "20:00", 600, 500_000));
-        flights.flightsDB.put("AA-55", new Flight("AA-55", "Yazd", "Kerman", "1400-05-20", "02:00", 600, 10_000));
+        flights.flightsDB.put("FA-17", new Flight("FA-17", "Yazd", "Shiraz", "1401-12-10", 1230, 500, 100_000));
+        flights.flightsDB.put("TA-55", new Flight("TA-55", "Yazd", "Isfahan", "1401-10-10", 2359, 600, 100_000));
+        flights.flightsDB.put("GG-55", new Flight("GG-55", "Yazd", "Tehran", "1401-12-10", 2359, 600, 200_000));
+        flights.flightsDB.put("SS-55", new Flight("SS-55", "Yazd", "Mashhad", "1402-12-10", 2000, 600, 500_000));
+        flights.flightsDB.put("AA-55", new Flight("AA-55", "Yazd", "Kerman", "1400-05-20", 200, 600, 10_000));
+        users.addUser("test", "test");
+        users.usersDB.get("test").addBalance(200_000_000);
     }
 
     public void signInPage() {
@@ -49,7 +51,7 @@ public class DataBase {
         System.out.println("\033[0m");
         username = username.toLowerCase();
         if (users.isUserPassCorrect(username, password)) {
-            new UserPanel(users.usersDB.get(username));
+            new UserPanel(users.usersDB.get(username), flights);
         } else {
             System.out.printf("%40cEither your username (\033[0;31m%s\033[0m) or password (\033[0;31m%s\033[0m) is wrong!", ' ', username, password);
             App.rest();
