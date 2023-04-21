@@ -7,12 +7,12 @@ public class Flights {
         flightsDB.put(flight.getFlightID(), flight);
     }
 
-    public boolean hasFlight(String flightID) {
-        return flightsDB.containsKey(flightID);
-    }
-
     public void removeFLight(String flightID) {
         flightsDB.remove(flightID);
+    }
+
+    public boolean hasFlight(String flightID) {
+        return flightsDB.containsKey(flightID);
     }
 
     public Flight getFlight(String flightID) {
@@ -21,7 +21,7 @@ public class Flights {
 
     public void showAllFlights() {
         App.clearScreen();
-        System.out.printf("%31c   ID  |   Origin   | Destination |    Date    |    Price   |  Time  | Seats \n\n", ' ');
+        System.out.printf("%31c   ID  |      Origin     |   Destination   |    Date    |    Price   |  Time  | Seats \n\n", ' ');
         flightsDB.values().forEach(System.out::print);
     }
 }

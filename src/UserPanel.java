@@ -22,7 +22,6 @@ public class UserPanel {
         }
     }
 
-
     private void printUserPanel() {
         System.out.printf("""
                                   %50c-------------------------------------------------

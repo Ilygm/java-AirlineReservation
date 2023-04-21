@@ -1,7 +1,6 @@
 public class Flight {
     private String flightID, origin, destination, date, time;
     private short availableSeats;
-
     private int price;
 
     public Flight(String flightID, String origin, String destination, String date, String time, int availableSeats, int price) {
