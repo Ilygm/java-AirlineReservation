@@ -1,4 +1,7 @@
+import java.util.ArrayList;
+
 public class User {
+    public final ArrayList<Flight> boughtFlights = new ArrayList<>();
     private final String username;
     private String password;
     private int balance = 0;
@@ -24,7 +27,7 @@ public class User {
         return balance;
     }
 
-    public void addBalance(int balance) {
+    public void changeBalance(int balance) {
         this.balance += balance;
     }
 }

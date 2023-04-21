@@ -2,10 +2,8 @@ import java.util.ArrayList;
 import java.util.Scanner;
 
 public class UserPanel {
-
     private final Scanner scanner = new Scanner(System.in);
     private final User user;
-
     private final Flights flights;
 
     public UserPanel(User user, Flights flights) {
@@ -18,9 +16,13 @@ public class UserPanel {
             printUserPanel();
             option = App.getIntInput();
             switch (option) {
-                case 1 -> filteringMenu();
-                case 5 -> chargeAccount();
-                case 6 -> passwordChanger(user);
+                case 1 -> availableFlights();
+                case 2 -> {
+                    flights.printSelectedFlights(user.boughtFlights);
+                    App.rest(2000);
+                }
+                case 3 -> chargeAccount();
+                case 4 -> passwordChanger(user);
                 case 0 -> {/* Filling empty space :) */}
                 default -> App.printInvalidInput();
             }
@@ -29,28 +31,24 @@ public class UserPanel {
 
     private void printUserPanel() {
         System.out.printf("""
-                                  %50c-------------------------------------------------
-                                  %50c|                                               |
-                                  %50c|             Welcome :  \033[1;34m%-20s\033[0m   |
-                                  %50c|                                               |
-                                  %50c|     Your balance is :  \033[0;32m%,-15d$\033[0m       |
-                                  %50c|                                               |
-                                  %50c-------------------------------------------------
+                                  %55c-------------------------------------------------
+                                  %55c|                                               |
+                                  %55c|             Welcome :  \033[1;34m%-20s\033[0m   |
+                                  %55c|                                               |
+                                  %55c|     Your balance is :  \033[0;32m%,-15d$\033[0m       |
+                                  %55c|                                               |
+                                  %55c-------------------------------------------------
                                                                     
-                                  %50c           1 - Search flight ticket
+                                  %50c           1 - Ticket searching and booking
                                                                     
-                                  %50c           2 - Ticket booking
+                                  %50c           2 - Owned tickets
                                                                     
-                                  %50c           3 - Ticket cancelation
+                                  %50c           3 - Add charge
                                                                     
-                                  %50c           4 - Tickets bought
-                                                                    
-                                  %50c           5 - Add charge
-                                                                    
-                                  %50c           6 - Change password
+                                  %50c           4 - Change password
                                                                     
                                   %50c           0 - Sign out
-                                  %50c  >>""" + ' ', ' ', ' ', ' ', user.getUsername(), ' ', ' ', user.getBalance(), ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ');
+                                  %50c  >>""" + ' ', ' ', ' ', ' ', user.getUsername(), ' ', ' ', user.getBalance(), ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ');
     }
 
     private void passwordChanger(User user) {
@@ -58,10 +56,14 @@ public class UserPanel {
         if (scanner.next().equals(user.getPassword())) {
             System.out.printf("\n%56cEnter your new password: ", ' ');
             user.setPassword(scanner.next());
-        } else System.out.printf("%56c    \033[0;31m!! Access denied !!\033[0m\n\n", ' ');
+            System.out.printf("\n%60c%s!! Password Changed !!%s", ' ', CColors.GREEN, CColors.RESET);
+        } else {
+            System.out.printf("%65c%s!! Access denied !!%s\n\n", ' ', CColors.RED, CColors.RESET);
+        }
+        App.rest();
     }
 
-    private void filteringMenu() {
+    private void availableFlights() {
         ArrayList<Flight> filteredFlights = new ArrayList<>();
         boolean isFiltered = false;
         while (true) {
@@ -69,7 +71,7 @@ public class UserPanel {
             if (isFiltered) {
                 flights.printSelectedFlights(filteredFlights);
             } else flights.showAllFlights();
-            printFilteringMenu();
+            printAvailableFlights();
             int option = App.getIntInput();
             switch (option) {
                 case 1 -> filteredFlights = filterFlights(2, getStringX("origin"), 0);
@@ -84,6 +86,10 @@ public class UserPanel {
                     isFiltered = false;
                     continue;
                 }
+                case 7 -> {
+                    ticketBuyer();
+                    continue;
+                }
                 case 0 -> {
                     return;
                 }
@@ -96,6 +102,33 @@ public class UserPanel {
         }
     }
 
+    private void ticketBuyer() {
+        System.out.printf("%50cEnter Flight id: %s", ' ', CColors.CYAN);
+        String tempFlightID = scanner.next();
+        System.out.print(CColors.RESET);
+        if (flights.hasFlight(tempFlightID)) {
+            Flight tempFlight = flights.getFlight(tempFlightID);
+            if (tempFlight.getAvailableSeats() != 0) {
+                if (user.boughtFlights.contains(tempFlight)) {
+                    System.out.printf("%s%50c!! You have already bought this flight !!%s", CColors.RED, ' ', CColors.RESET);
+                } else if (tempFlight.getPrice() > user.getBalance()) {
+                    System.out.printf("%s%50c!! You do not have enough balance !!%s", CColors.RED, ' ', CColors.RESET);
+                } else {
+                    tempFlight.reduceAvailableSeats(1);
+                    user.changeBalance(-tempFlight.getPrice());
+                    user.boughtFlights.add(tempFlight);
+                    System.out.printf("%s%55c!! You have bought this flight !!%s", CColors.GREEN, ' ', CColors.RESET);
+                }
+            } else {
+                System.out.printf("%s%50c!! Selected flight has no more seats !!%s", CColors.RED, ' ', CColors.RESET);
+            }
+        } else {
+            System.out.printf("%s%60c!! FlightID not found !!%s", CColors.RED, ' ', CColors.RESET);
+
+        }
+        App.rest();
+    }
+
     private String getDateInput() {
         String tempString = getStringX("date (exp. yyyy-mm-dd)");
         while (!tempString.matches("^\\d\\d\\d\\d-\\d\\d-\\d\\d$")) {
@@ -105,22 +138,22 @@ public class UserPanel {
         return tempString;
     }
 
-    private void printFilteringMenu() {
+    private void printAvailableFlights() {
         System.out.printf("""
-                                
-                                
-                %50cWhat parameter would you like to search:
-                                    
-                %50c            1 - Origin
-                %50c            2 - Destination
-                %50c            3 - Date
-                %50c            4 - Time Range
-                %50c            5 - Price Range
-                %50c            6 - Reset Filters
-                                
-                %50c            7 - Reserve a flight
-                %50c            0 - Go back
-                %50c   >>""" + ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ');
+                                                  
+                                                  
+                                  %50cWhat parameter would you like to search:
+                                                      
+                                  %50c            1 - Origin
+                                  %50c            2 - Destination
+                                  %50c            3 - Date
+                                  %50c            4 - Time Range
+                                  %50c            5 - Price limit
+                                  %50c            6 - Reset Filters
+                                                  
+                                  %50c            7 - Reserve a flight
+                                  %50c            0 - Go back
+                                  %50c   >>""" + ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ');
     }
 
     private ArrayList<Flight> filterFlights(int field, String searchText, int priceLimit) {
@@ -178,7 +211,7 @@ public class UserPanel {
                         App.rest();
                         charged = App.getIntInput();
                     }
-                    user.addBalance(charged);
+                    user.changeBalance(charged);
                 }
                 case 0 -> notDone = false;
                 default -> App.printInvalidInput();

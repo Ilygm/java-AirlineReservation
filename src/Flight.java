@@ -3,6 +3,7 @@ public class Flight {
     private int availableSeats;
     private int time;
     private int price;
+    public boolean isModified = false;
 
     public Flight(String flightID, String origin, String destination, String date, int time, int availableSeats, int price) {
         this.flightID = flightID;
@@ -42,6 +43,10 @@ public class Flight {
         return date;
     }
 
+    public void setAvailableSeats(int availableSeats) {
+        this.availableSeats = availableSeats;
+    }
+
     public void setDate(String date) {
         this.date = date;
     }
@@ -58,8 +63,9 @@ public class Flight {
         return availableSeats;
     }
 
-    public void setAvailableSeats(int availableSeats) {
-        this.availableSeats = availableSeats;
+    public void reduceAvailableSeats(int byAmount) {
+        availableSeats -= byAmount;
+        isModified = true;
     }
 
     public int getPrice() {

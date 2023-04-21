@@ -81,10 +81,13 @@ public class App {
     /**
      * To make sure user sees the massage
      */
-    public static void rest() {rest(1500);}
-    public static void rest(int milliTimeOut){
+    public static void rest() {
+        rest(1500);
+    }
+
+    public static void rest(int milliTimeOut) {
         try {
-            TimeUnit.MILLISECONDS.sleep( milliTimeOut);
+            TimeUnit.MILLISECONDS.sleep(milliTimeOut);
         } catch (InterruptedException e) {
             System.err.println("!! Program was interrupted !!");
         }

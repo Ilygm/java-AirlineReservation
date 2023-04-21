@@ -73,6 +73,11 @@ public class AdminPanel {
         String tempFlightID = scanner.next();
         System.out.println(CColors.RESET);
         if (flights.hasFlight(tempFlightID)) {
+            if (flights.getFlight(tempFlightID).isModified) {
+                System.out.printf("%50c%s!! Flight is already bought !!%s", ' ', CColors.RED, CColors.RESET);
+                App.rest();
+                return;
+            }
             printModifyMenu();
             int option = App.getIntInput();
             switch (option) {
@@ -100,12 +105,17 @@ public class AdminPanel {
         App.clearScreen();
         flights.showAllFlights();
         System.out.printf("\n\n%40cEnter a flightID to remove: %s", ' ', CColors.RED);
-        String tempString = scanner.next();
-        if (flights.hasFlight(tempString)) {
-            System.out.printf("%s\n%35cSelected flight:\n\n%s", CColors.RESET, ' ', flights.getFlight(tempString));
+        String tempFlightID = scanner.next();
+        if (flights.hasFlight(tempFlightID)) {
+            if (flights.getFlight(tempFlightID).isModified) {
+                System.out.printf("%50c%s!! Flight is already bought !!%s", ' ', CColors.RED, CColors.RESET);
+                App.rest();
+                return;
+            }
+            System.out.printf("%s\n%35cSelected flight:\n\n%s", CColors.RESET, ' ', flights.getFlight(tempFlightID));
             System.out.printf("\n%50cAre you sure (y / n)? ", ' ');
             if (scanner.next().equals("y")) {
-                flights.removeFLight(tempString);
+                flights.removeFLight(tempFlightID);
                 System.out.printf("%50c%s!! Selected flight has been removed !!%s", ' ', CColors.CYAN, CColors.RESET);
                 App.rest();
             }
