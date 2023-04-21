@@ -7,19 +7,121 @@ public class AdminPanel {
     public AdminPanel(Flights flights) {
         this.flights = flights;
 
-        App.clearScreen();
         int option = -1;
         while (option != 0) {
+            App.clearScreen();
             printAdminPanel();
             option = App.getIntInput();
             switch (option) {
                 case 1 -> addFlight();
-                case 4 -> flights.showFlights();
+                case 2 -> modifyFlight();
+                case 3 -> removeFlight();
+                case 4 -> {
+                    flights.showAllFlights();
+                    System.out.printf("\n%40cPress Enter to continue...", ' ');
+                    scanner.nextLine();
+                }
                 case 0 -> {/* he, he */}
-                default -> App.invalidInput();
+                default -> App.printInvalidInput();
             }
-            App.clearScreen();
         }
+    }
+
+    private void addFlight() {
+        App.clearScreen();
+        Flight tempFlight = new Flight(null, null, null, null, "00:00", 0, 0);
+        System.out.printf("""
+                                  %55c--------------------------------
+                                  %55c|                              |
+                                  %55c|       Adding a Flight        |
+                                  %55c|                              |
+                                  %55c--------------------------------
+                                                                                                   
+                                  """ + ' ', ' ', ' ', ' ', ' ', ' ');
+        String tempString = getStringX("flightID (exp. EX-22, WG-45)");
+        while (!tempString.matches("^[A-Z][A-Z]-\\d\\d$")) {
+            System.out.printf("%50c  \033[0;31m! Provided ID is incorrect !\033[0m\n", ' ');
+            tempString = getStringX("flightID (exp. EX-22, WG-45)");
+        }
+        tempFlight.setFlightID(tempString);
+        tempFlight.setOrigin(getStringX("origin"));
+        tempFlight.setDestination(getStringX("destination"));
+        tempString = getStringX("date (exp. yyyy-mm-dd)");
+        while (!tempString.matches("^\\d\\d\\d\\d-\\d\\d-\\d\\d$")) {
+            System.out.printf("%50c  \033[0;31m! Provided date is incorrect !\033[0m\n", ' ');
+            tempString = getStringX("date (exp. yyyy-mm-dd)");
+        }
+        tempFlight.setDate(tempString);
+        tempString = getStringX("departure time (exp. 12:00, 24:00)");
+        while (!tempString.matches("^\\d\\d:\\d\\d$")) {
+            System.out.printf("%50c  \033[0;31m! Provided time is incorrect !\033[0m\n", ' ');
+            tempString = getStringX("departure time (exp. 1200, 2400)");
+        }
+        tempFlight.setTime(tempString);
+        tempFlight.setPrice(setIntX("price"));
+        tempFlight.setAvailableSeats(setIntX("seat"));
+        flights.addFLight(tempFlight);
+        System.out.printf("\n%56c\033[0;32m!!    Your flight has been added      !!\033[0m", ' ');
+        if (scanner.hasNextLine()) scanner.nextLine();
+        App.rest();
+    }
+
+    private void modifyFlight() {
+        App.clearScreen();
+        flights.showAllFlights();
+        System.out.printf("\n\n%40cEnter a flightID to modify: %s", ' ', CColors.CYAN);
+        String tempFlightID = scanner.next();
+        System.out.println(CColors.RESET);
+        if (flights.hasFlight(tempFlightID)) {
+            printModifyMenu();
+            int option = App.getIntInput();
+            switch (option) {
+                case 1 -> flights.getFlight(tempFlightID).setOrigin(getStringX("new origin"));
+                case 2 -> flights.getFlight(tempFlightID).setDestination(getStringX("new destination"));
+                case 3 -> {
+                    System.out.printf("%50cProvide the new price: %s", ' ', CColors.CYAN);
+                    flights.getFlight(tempFlightID).setPrice(setIntX("price"));
+                }
+                case 4 -> flights.getFlight(tempFlightID).setDate(getStringX("new date"));
+                case 5 -> flights.getFlight(tempFlightID).setTime(getStringX("new time"));
+                default -> App.printInvalidInput();
+            }
+            if (scanner.hasNextLine()) scanner.nextLine();
+        } else {
+            System.out.printf("%s%60c!! FlightID not found !!%s", CColors.RED, ' ', CColors.RESET);
+            App.rest();
+        }
+    }
+
+    private void removeFlight() {
+        App.clearScreen();
+        flights.showAllFlights();
+        System.out.printf("\n\n%40cEnter a flightID to remove: %s", ' ', CColors.RED);
+        String tempString = scanner.next();
+        if (flights.hasFlight(tempString)) {
+            System.out.printf("%s\n%35cSelected flight:\n\n%s", CColors.RESET, ' ', flights.getFlight(tempString));
+            System.out.printf("\n%50cAre you sure (y / n)? ", ' ');
+            if (scanner.next().equals("y")) {
+                flights.removeFLight(tempString);
+                System.out.printf("%50c%s!! Selected flight has been removed !!%s", ' ', CColors.CYAN, CColors.RESET);
+                App.rest();
+            }
+        } else {
+            System.out.printf("%60c!! FlightID not found !!%s", ' ', CColors.RESET);
+            App.rest();
+        }
+        scanner.nextLine();
+    }
+
+    private void printModifyMenu() {
+        System.out.printf("""
+                                  %55c  What would you like to change?
+                                  %55c1 - Origin
+                                  %55c2 - Destination
+                                  %55c3 - Price
+                                  %55c4 - Date
+                                  %55c5 - Time
+                                  %55c>>""" + ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ');
     }
 
     private void printAdminPanel() {
@@ -43,50 +145,23 @@ public class AdminPanel {
                                   %50c>>""" + ' ', ' ', ' ', ' ', ' ', "Admin", ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ');
     }
 
-    public void addFlight() {
-        App.clearScreen();
-        Flight tempFlight = new Flight(null, null, null, null, 0, 0, 0);
-        System.out.printf("""
-                                  %50c--------------------------------
-                                  %50c|                              |
-                                  %50c|       Adding a Flight        |
-                                  %50c|                              |
-                                  %50c--------------------------------
-                                                                    
-                                  %47c- Exp: EX-22, WG-45, SS-55
-                                                                    
-                                  %47cEnter the flight ID:""" + ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ');
-        String tempString = scanner.next();
-        while (!tempString.matches("^[A-Z][A-Z]-\\d\\d$")) {
-            System.out.printf("%50c  \033[0;31m! Provided ID is incorrect !\033[0m\n%47cEnter the flight ID: ", ' ', ' ');
-            tempString = scanner.next();
-        }
-        tempFlight.setFlightID(tempString);
-        System.out.printf("\n%47cEnter the origin city: ", ' ');
-        tempString = scanner.next();
-        tempFlight.setOrigin(tempString);
-        System.out.printf("\n%47cEnter the destination city: ", ' ');
-        tempString = scanner.next();
-        tempFlight.setDestination(tempString);
-        System.out.printf("\n%47cEnter the date: ", ' ');
-        tempString = scanner.next();
-        tempFlight.setDate(tempString);
-        System.out.printf("\n%47cEnter the departure time in 24h format: ", ' ');
-        int tempInt = App.getIntInput();
-        while (tempInt > 2400 || tempInt < 0) {
-            System.out.printf("%50c  \033[0;31m! Provided time is incorrect !\033[0m\n%47cEnter the departure time again: ", ' ', ' ');
-            tempInt = App.getIntInput();
-        }
-        tempFlight.setTime(tempInt);
-        System.out.printf("\n%47cEnter the airplane's seat count: ", ' ');
-        tempInt = App.getIntInput();
-        while (tempInt < 0) {
-            System.out.printf("%50c  \033[0;31m! Provided seat is incorrect !\033[0m\n%47cEnter the seat count again: ", ' ', ' ');
-            tempInt = App.getIntInput();
-        }
-        tempFlight.setAvailableSeats(tempInt);
-        flights.addFLight(tempFlight);
-        System.out.printf("%46c\033[0;32m!!    Your flight has been added      !!\033[0m", ' ');
-        App.rest();
+    private String getStringX(String text) {
+        System.out.printf("\n%50c Enter the %s: %s", ' ', text, CColors.CYAN);
+        text = scanner.next();
+        System.out.print(CColors.RESET);
+        return text;
+    }
+
+    private int setIntX(String text) {
+        do {
+            System.out.printf("\n%50c Enter the %s: %s", ' ', text, CColors.CYAN);
+            int newValue = App.getIntInput();
+            System.out.printf(CColors.RESET);
+            if (newValue > 0) return newValue;
+            else {
+                System.out.printf("%60c%s!! Given value cannot be negative !!", ' ', CColors.RED);
+                App.rest();
+            }
+        } while (true);
     }
 }

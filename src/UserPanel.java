@@ -8,35 +8,26 @@ public class UserPanel {
     public UserPanel(User user) {
         this.user = user;
 
-        App.clearScreen();
         int option = -1;
         while (option != 0) {
+            App.clearScreen();
             printUserPanel();
             option = App.getIntInput();
             switch (option) {
                 case 5 -> chargeAccount();
                 case 6 -> passwordChanger(user);
-                case 0 -> {/*LOL*/}
-                default -> App.invalidInput();
+                case 0 -> {/* LOL */}
+                default -> App.printInvalidInput();
             }
         }
     }
 
-    private void passwordChanger(User user) {
-        System.out.printf("\n%56cYou're about to change your password\n%56cEnter your current password: ", ' ', ' ');
-        String tempPass = scanner.next();
-        if (tempPass.equals(user.getPassword())) {
-            System.out.printf("\n%56cEnter your new password: ", ' ');
-            tempPass = scanner.next();
-            user.setPassword(tempPass);
-        } else System.out.printf("%56c    \033[0;31m!! Access denied !!\033[0m\n\n", ' ');
-    }
 
     private void printUserPanel() {
         System.out.printf("""
                                   %50c-------------------------------------------------
                                   %50c|                                               |
-                                  %50c|         Welcome    :  \033[1;34m%-20s\033[0m    |
+                                  %50c|             Welcome :  \033[1;34m%-20s\033[0m   |
                                   %50c|                                               |
                                   %50c|     Your balance is :  \033[0;32m%,-15d$\033[0m       |
                                   %50c|                                               |
@@ -92,9 +83,16 @@ public class UserPanel {
                     user.addBalance(charged);
                 }
                 case 0 -> notDone = false;
-                default -> App.invalidInput();
+                default -> App.printInvalidInput();
             }
         }
     }
 
+    private void passwordChanger(User user) {
+        System.out.printf("\n%56cYou're about to change your password\n%56cEnter your current password: ", ' ', ' ');
+        if (scanner.next().equals(user.getPassword())) {
+            System.out.printf("\n%56cEnter your new password: ", ' ');
+            user.setPassword(scanner.next());
+        } else System.out.printf("%56c    \033[0;31m!! Access denied !!\033[0m\n\n", ' ');
+    }
 }

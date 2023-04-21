@@ -13,7 +13,7 @@ public class App {
                 case 1 -> db.signInPage();
                 case 2 -> db.makeNewUser();
                 case 0 -> {/* Nothing :) */}
-                default -> invalidInput();
+                default -> printInvalidInput();
             }
         }
     }
@@ -73,7 +73,7 @@ public class App {
     /**
      * Just making things are easier
      */
-    public static void invalidInput() {
+    public static void printInvalidInput() {
         System.out.printf("%64c\033[0;31m!! Invalid Input !!\033[0m", ' ');
         rest();
     }
@@ -81,9 +81,10 @@ public class App {
     /**
      * To make sure user sees the massage
      */
-    public static void rest() {
+    public static void rest() {rest(1500);}
+    public static void rest(int milliTimeOut){
         try {
-            TimeUnit.MILLISECONDS.sleep(1750);
+            TimeUnit.MILLISECONDS.sleep( milliTimeOut);
         } catch (InterruptedException e) {
             System.err.println("!! Program was interrupted !!");
         }

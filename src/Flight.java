@@ -1,16 +1,20 @@
 public class Flight {
-    private String flightID, origin, destination, date;
+    private String flightID, origin, destination, date, time;
     private short availableSeats;
-    private int price;
-    private short time;
 
-    public Flight(String flightID, String origin, String destination, String date,int time,int availableSeats, int price) {
+    private int price;
+
+    public Flight(String flightID, String origin, String destination, String date, String time, int availableSeats, int price) {
         this.flightID = flightID;
         this.origin = origin;
         this.destination = destination;
         this.date = date;
-        this.time = (short)time;
+        this.time = time;
         this.availableSeats = (short) availableSeats;
+        this.price = price;
+    }
+
+    public void setPrice(int price) {
         this.price = price;
     }
 
@@ -31,19 +35,19 @@ public class Flight {
     }
 
     public void setAvailableSeats(int availableSeats) {
-        this.availableSeats = (short )availableSeats;
+        this.availableSeats = (short) availableSeats;
     }
 
     public void setDate(String date) {
         this.date = date;
     }
 
-    public void setTime(int time) {
-        this.time = (short)time;
+    public void setTime(String time) {
+        this.time = time;
     }
 
     @Override
     public String toString() {
-        return String.format(" %-4s | %-10s | %-10s | %-10s | %-10d_ | %4d | %5d_", flightID, origin, destination, date, price, time, availableSeats);
+        return String.format("%31c %-4s | %-15s | %-15s | %-10s | %,-10d |  %5s | %,5d\n", ' ', flightID, origin, destination, date, price, time, availableSeats);
     }
 }

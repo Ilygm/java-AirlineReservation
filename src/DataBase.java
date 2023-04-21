@@ -6,8 +6,11 @@ public class DataBase {
     private final Flights flights = new Flights();
 
     {
-        flights.flightsDB.put("FA-17", new Flight("FA-17", "Yazd", "Shiraz", "1401-12-10", 1230, 500, 100_000));
-        flights.flightsDB.put("TA-55", new Flight("TA-55", "Yazd", "Isfahan", "1401-10-10", 1330, 600, 100_000));
+        flights.flightsDB.put("FA-17", new Flight("FA-17", "Yazd", "Shiraz", "1401-12-10", "12:30", 500, 100_000));
+        flights.flightsDB.put("TA-55", new Flight("TA-55", "Yazd", "Isfahan", "1401-10-10", "23:59", 600, 100_000));
+        flights.flightsDB.put("GG-55", new Flight("GG-55", "Yazd", "Tehran", "1401-12-10", "23:59", 600, 200_000));
+        flights.flightsDB.put("SS-55", new Flight("SS-55", "Yazd", "Mashhad", "1402-12-10", "20:00", 600, 500_000));
+        flights.flightsDB.put("AA-55", new Flight("AA-55", "Yazd", "Kerman", "1400-05-20", "02:00", 600, 10_000));
     }
 
     public void signInPage() {
@@ -33,7 +36,7 @@ public class DataBase {
                 case 1 -> new AdminPanel(flights);
                 case 2 -> searchListMenu();
                 case 0 -> {/* Nothing to see here */}
-                default -> App.invalidInput();
+                default -> App.printInvalidInput();
             }
         }
     }
@@ -75,15 +78,15 @@ public class DataBase {
     }
 
     private String usernameInput() {
-        String tempUsername;
-        do {
+        String tempUsername = scanner.next();
+        while (users.usersDB.containsKey(tempUsername)) {
             System.out.printf("%47c\033[0;31m    !! Current username is used, try again !!\033[0m\n\n%56cEnter a new username >> \033[1;36m ", ' ', ' ');
             tempUsername = scanner.next();
-        } while (users.usersDB.containsKey(tempUsername));
-        do {
+        }
+        while (!(tempUsername.matches("^[a-zA-Z]\\w*$")) || tempUsername.length() < 4) {
             System.out.printf("%56c\033[0m    !! Username is not acceptable ( %s )!!\n%56cEnter another username >> \033[1;36m ", ' ', ("\033[0;31m" + tempUsername + "\033[0m"), ' ');
             tempUsername = scanner.next();
-        } while (!(tempUsername.matches("^[a-zA-Z]\\w*$")) || tempUsername.length() < 4);
+        }
         return tempUsername;
     }
 
@@ -99,10 +102,10 @@ public class DataBase {
                                                                    
                                   %54c  Enter your password >>""" + "\033[0;36m ", ' ', ' ', ' ', ' ');
         tempPass = scanner.next();
-        do {
+        while (!(tempPass.matches("^\\w*$")) || tempPass.length() < 5) {
             System.out.printf("%54c\033[0m   !! Password is not acceptable ( %s ) !!\n%54cEnter another password >> \033[0;36m ", ' ', ("\033[1;31m" + tempPass + "\033[0m"), ' ');
             tempPass = scanner.next();
-        } while (!(tempPass.matches("^\\w*$")) || tempPass.length() < 5);
+        }
         System.out.print("\033[0m");
         return tempPass;
     }
