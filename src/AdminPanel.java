@@ -40,7 +40,7 @@ public class AdminPanel {
                                   """ + ' ', ' ', ' ', ' ', ' ', ' ');
         String tempString = getStringX("flightID (exp. EX-22, WG-45)");
         while (!tempString.matches("^[A-Z][A-Z]-\\d\\d$")) {
-            System.out.printf("%50c  \033[0;31m! Provided ID is incorrect !\033[0m\n", ' ');
+            System.out.printf("%50c  %s! Provided ID is incorrect !%s\n", ' ', CColors.RED, CColors.RESET);
             tempString = getStringX("flightID (exp. EX-22, WG-45)");
         }
         tempFlight.setFlightID(tempString);
@@ -48,20 +48,20 @@ public class AdminPanel {
         tempFlight.setDestination((getStringX("destination")));
         tempString = getStringX("date (exp. yyyy-mm-dd)");
         while (!tempString.matches("^\\d\\d\\d\\d-\\d\\d-\\d\\d$")) {
-            System.out.printf("%50c  \033[0;31m! Provided date is incorrect !\033[0m\n", ' ');
+            System.out.printf("%50c  %s! Provided date is incorrect !%s\n", ' ', CColors.RED, CColors.RESET);
             tempString = getStringX("date (exp. yyyy-mm-dd)");
         }
         tempFlight.setDate(tempString);
         int tempTime = getIntX("departure time (exp. 1200, 2400)");
         while (tempTime > 2400) {
-            System.out.printf("%50c  \033[0;31m! Provided time is incorrect !\033[0m\n", ' ');
+            System.out.printf("%50c  %s! Provided time is incorrect !%s\n", ' ', CColors.RED, CColors.RESET);
             tempTime = getIntX("departure time (exp. 1200, 2400)");
         }
         tempFlight.setTime(tempTime);
         tempFlight.setPrice(getIntX("price"));
         tempFlight.setAvailableSeats(getIntX("seat"));
         flights.addFLight(tempFlight);
-        System.out.printf("\n%56c\033[0;32m!!    Your flight has been added      !!\033[0m", ' ');
+        System.out.printf("\n%56c%s!!    Your flight has been added      !!%s", ' ', CColors.GREEN, CColors.RESET);
         if (scanner.hasNextLine()) scanner.nextLine();
         App.rest();
     }

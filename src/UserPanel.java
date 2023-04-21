@@ -21,7 +21,7 @@ public class UserPanel {
                     flights.printSelectedFlights(user.boughtFlights);
                     App.rest(2000);
                 }
-                case 3 -> chargeAccount();
+                case 3 -> chargeAccount(user);
                 case 4 -> passwordChanger(user);
                 case 0 -> {/* Filling empty space :) */}
                 default -> App.printInvalidInput();
@@ -29,13 +29,25 @@ public class UserPanel {
         }
     }
 
+    private static void chargeAccount(User user) {
+        int charged;
+        System.out.printf("\n\n%55cHow much would you like to charge? \n%60c[ Current balance: %s%,d%s ]\n\n%54c>> ", ' ', ' ', CColors.GREEN, user.getBalance(), CColors.RESET, ' ');
+        charged = App.getIntInput();
+        while (charged <= 0) {
+            System.out.printf("%68c!! Wrong input try again !!\n%54c>> ", ' ', ' ');
+            App.rest();
+            charged = App.getIntInput();
+        }
+        user.changeBalance(charged);
+    }
+
     private void printUserPanel() {
         System.out.printf("""
                                   %55c-------------------------------------------------
                                   %55c|                                               |
-                                  %55c|             Welcome :  \033[1;34m%-20s\033[0m   |
+                                  %55c|             Welcome :  %-20s   |
                                   %55c|                                               |
-                                  %55c|     Your balance is :  \033[0;32m%,-15d$\033[0m       |
+                                  %55c|     Your balance is :  %s%,-15d$%s       |
                                   %55c|                                               |
                                   %55c-------------------------------------------------
                                                                     
@@ -48,14 +60,21 @@ public class UserPanel {
                                   %50c           4 - Change password
                                                                     
                                   %50c           0 - Sign out
-                                  %50c  >>""" + ' ', ' ', ' ', ' ', user.getUsername(), ' ', ' ', user.getBalance(), ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ');
+                                  %50c  >>""" + ' ', ' ', ' ', ' ', CColors.BLUE + user.getUsername() + CColors.RESET, ' ', ' ', CColors.GREEN, user.getBalance(), CColors.RESET, ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ');
     }
 
     private void passwordChanger(User user) {
         System.out.printf("\n%56cYou're about to change your password\n%56cEnter your current password: ", ' ', ' ');
         if (scanner.next().equals(user.getPassword())) {
             System.out.printf("\n%56cEnter your new password: ", ' ');
-            user.setPassword(scanner.next());
+            String tempPass = scanner.next();
+            while (!(tempPass.matches("^\\w*$")) || tempPass.length() < 5) {
+                System.out.printf("""
+                                          %60c%s   !! Password is not acceptable ( %s ) !!
+                                          %56cEnter another password >> %s""" + ' ', ' ', CColors.RESET, (CColors.RED + tempPass + CColors.RESET), ' ', CColors.CYAN);
+                tempPass = scanner.next();
+            }
+            user.setPassword(tempPass);
             System.out.printf("\n%60c%s!! Password Changed !!%s", ' ', CColors.GREEN, CColors.RESET);
         } else {
             System.out.printf("%65c%s!! Access denied !!%s\n\n", ' ', CColors.RED, CColors.RESET);
@@ -132,7 +151,7 @@ public class UserPanel {
     private String getDateInput() {
         String tempString = getStringX("date (exp. yyyy-mm-dd)");
         while (!tempString.matches("^\\d\\d\\d\\d-\\d\\d-\\d\\d$")) {
-            System.out.printf("%50c  \033[0;31m! Provided date is incorrect !\033[0m\n", ' ');
+            System.out.printf("%50c  %s!! Provided date is incorrect !!%s", ' ', CColors.RED, CColors.RESET);
             tempString = getStringX("date (exp. yyyy-mm-dd)");
         }
         return tempString;
@@ -193,49 +212,6 @@ public class UserPanel {
             }
         }
         return filteredFlights;
-    }
-
-    public void chargeAccount() {
-        boolean notDone = true;
-        while (notDone) {
-            App.clearScreen();
-            printChargeAccount();
-            int option = App.getIntInput();
-            switch (option) {
-                case 1 -> {
-                    int charged;
-                    System.out.printf("\n\n%55cHow much would you like to charge? \n%60c[ Current balance: \033[0;32m%,d\033[0m ]\n\n%54c>> ", ' ', ' ', user.getBalance(), ' ');
-                    charged = App.getIntInput();
-                    while (charged <= 0) {
-                        System.out.printf("%68c!! Wrong input try again !!\n%54c>> ", ' ', ' ');
-                        App.rest();
-                        charged = App.getIntInput();
-                    }
-                    user.changeBalance(charged);
-                }
-                case 0 -> notDone = false;
-                default -> App.printInvalidInput();
-            }
-        }
-    }
-
-    private void printChargeAccount() {
-        System.out.printf("""
-                                  %54c----------------------------------------
-                                  %54c|                                      |
-                                  %54c|       Welcome    :  \033[1;34m%-10s\033[0m       |
-                                  %54c|                                      |
-                                  %54c|  Your balance is :  \033[0;32m%,-7d$\033[0m         |
-                                  %54c|                                      |
-                                  %54c----------------------------------------
-                                                                        
-                                  %51cWould you like to add balance to your account?
-                                                                        
-                                  %67c1 - Sure
-                                                                        
-                                  %67c0 - I will do it later
-                                                                        
-                                  %54c>>""" + ' ', ' ', ' ', ' ', user.getUsername(), ' ', ' ', user.getBalance(), ' ', ' ', ' ', ' ', ' ', ' ');
     }
 
     private String getStringX(String text) {

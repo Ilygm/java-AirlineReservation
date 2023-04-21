@@ -23,7 +23,7 @@ public class DataBase {
             System.out.printf("""
                                       %56c-------------------------
                                       %56c|                       |
-                                      %56c|        \033[1;36mSign in\033[0m        |
+                                      %56c|       %s sign in%s        |
                                       %56c|                       |
                                       %56c-------------------------
                                       %56c
@@ -33,7 +33,7 @@ public class DataBase {
                                       %56c
                                       %56c   0 - Main menu
                                       %56c
-                                      %56c >>""" + ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ');
+                                      %56c >>""" + ' ', ' ', ' ', ' ', CColors.CYAN, CColors.RESET, ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ');
             option = App.getIntInput();
             switch (option) {
                 case 1 -> new AdminPanel(flights);
@@ -45,16 +45,16 @@ public class DataBase {
     }
 
     public void searchListMenu() {
-        System.out.printf("\n%56cEnter your username:\033[1;36m ", ' ');
+        System.out.printf("\n%56cEnter your username:%s ", ' ', CColors.CYAN);
         String username = scanner.next();
-        System.out.printf("\n%56c\033[0mEnter your password:\033[0;36m ", ' ');
+        System.out.printf("\n%56c%sEnter your password:%s ", ' ', CColors.RESET, CColors.CYAN);
         String password = scanner.next();
-        System.out.println("\033[0m");
+        System.out.println(CColors.RESET);
         username = username.toLowerCase();
         if (users.isUserPassCorrect(username, password)) {
             new UserPanel(users.usersDB.get(username), flights);
         } else {
-            System.out.printf("%40cEither your username (\033[0;31m%s\033[0m) or password (\033[0;31m%s\033[0m) is wrong!", ' ', username, password);
+            System.out.printf("%40c!! Either your username ( %s ) or password ( %s ) is wrong !!", ' ', CColors.RED + username + CColors.RESET, CColors.RED + password + CColors.RED);
             App.rest();
         }
     }
@@ -64,30 +64,30 @@ public class DataBase {
         System.out.printf("""
                                   %56c-----------------------------
                                   %56c|                           |
-                                  %56c|      \033[1;36mNew user signup\033[0m      |
+                                  %56c|      %sNew user signup%s      |
                                   %56c|                           |
                                   %56c-----------------------------
                                                                     
-                                  %56c  [ \033[4;37mUsername Requirements\033[0m ]
+                                  %56c  [ %sUsername Requirements%s ]
                                                                     
                                   %56c- At least choose 4 letters.
                                                                     
                                   %56c- It can't start with a number.
                                                                     
-                                  %56cEnter your Username >>""" + "\033[1;36m ", ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ');
+                                  %56cEnter your Username >>%s""" + ' ', ' ', ' ', ' ', CColors.CYAN, CColors.RESET, ' ', ' ', ' ', CColors.WHITE, CColors.RESET, ' ', ' ', ' ', CColors.CYAN);
         users.addUser(usernameInput(), passwordInput());
-        System.out.printf("\n%45c\033[0m    \033[1;32m!! Your account has been successfully created !!\033[0m ", ' ');
+        System.out.printf("\n%45c    %s!! Your account has been successfully created !!%s ", ' ', CColors.GREEN, CColors.RESET);
         App.rest();
     }
 
     private String usernameInput() {
         String tempUsername = scanner.next();
         while (users.usersDB.containsKey(tempUsername)) {
-            System.out.printf("%47c\033[0;31m    !! Current username is used, try again !!\033[0m\n\n%56cEnter a new username >> \033[1;36m ", ' ', ' ');
+            System.out.printf("%47c%s    !! Current username is used, try again !!%s\n\n%56cEnter a new username >> %s ", ' ', CColors.RED, CColors.RESET, ' ', CColors.CYAN);
             tempUsername = scanner.next();
         }
         while (!(tempUsername.matches("^[a-zA-Z]\\w*$")) || tempUsername.length() < 4) {
-            System.out.printf("%56c\033[0m    !! Username is not acceptable ( %s )!!\n%56cEnter another username >> \033[1;36m ", ' ', ("\033[0;31m" + tempUsername + "\033[0m"), ' ');
+            System.out.printf("%56c%s    !! Username is not acceptable ( %s )!!\n%56cEnter another username >> %s ", ' ', CColors.RESET, (CColors.RED + tempUsername + CColors.RESET), ' ', CColors.CYAN);
             tempUsername = scanner.next();
         }
         return tempUsername;
@@ -96,20 +96,20 @@ public class DataBase {
     private String passwordInput() {
         String tempPass;
         System.out.printf("""
-                                  \033[0m
-                                  %54c    [ \033[4;37mPassword Requirements\033[0m ]
+                                  %s
+                                  %54c    [ %sPassword Requirements%s ]
                                                                    
                                   %54c  - It should only contain ( a - z | A - Z | 0 - 9 | _ ).
                                                                    
                                   %54c  - It should be longer than 4 charecters.
                                                                    
-                                  %54c  Enter your password >>""" + "\033[0;36m ", ' ', ' ', ' ', ' ');
+                                  %54c  Enter your password >>""" + CColors.CYAN + ' ', CColors.RESET, ' ', CColors.WHITE, CColors.RESET, ' ', ' ', ' ');
         tempPass = scanner.next();
         while (!(tempPass.matches("^\\w*$")) || tempPass.length() < 5) {
-            System.out.printf("%54c\033[0m   !! Password is not acceptable ( %s ) !!\n%54cEnter another password >> \033[0;36m ", ' ', ("\033[1;31m" + tempPass + "\033[0m"), ' ');
+            System.out.printf("%54c%s   !! Password is not acceptable ( %s ) !!\n%54cEnter another password >> %s ", ' ', CColors.RESET, (CColors.RED + tempPass + CColors.RESET), ' ', CColors.CYAN);
             tempPass = scanner.next();
         }
-        System.out.print("\033[0m");
+        System.out.print(CColors.RESET);
         return tempPass;
     }
 }

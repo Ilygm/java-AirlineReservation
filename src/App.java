@@ -74,7 +74,7 @@ public class App {
      * Just making things are easier
      */
     public static void printInvalidInput() {
-        System.out.printf("%64c\033[0;31m!! Invalid Input !!\033[0m", ' ');
+        System.out.printf("%64c%s!! Invalid Input !!%s", ' ', CColors.RED, CColors.RESET);
         rest();
     }
 
