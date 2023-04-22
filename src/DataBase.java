@@ -1,10 +1,14 @@
 import java.util.Scanner;
 
 public class DataBase {
+    // Initialization of database
     public final Users users = new Users();
+    private final Tickets tickets = new Tickets();
     private final Scanner scanner = new Scanner(System.in);
     private final Flights flights = new Flights();
 
+
+    // SETS DEFAULT VALUES FOR TESTING
     {
         flights.flightsDB.put("FA-17", new Flight("FA-17", "Yazd", "Shiraz", "1401-12-10", 1230, 0, 100_000));
         flights.flightsDB.put("TA-55", new Flight("TA-55", "Tehran", "Isfahan", "1401-10-10", 2359, 600, 100_000));
@@ -14,31 +18,52 @@ public class DataBase {
         flights.flightsDB.put("AA-46", new Flight("AA-46", "Isfahan", "Tehran", "1400-06-20", 500, 600, 100_000));
         flights.flightsDB.put("AA-14", new Flight("AA-14", "Germany", "Iran", "1402-10-20", 900, 0, 100_000));
         flights.flightsDB.put("AA-41", new Flight("AA-41", "Iran", "Germany", "1402-10-20", 300, 1, 100_000));
+        flights.flightsDB.put("FX-45", new Flight("FX-45", "KermanShah", "Ghom", "1402-05-25", 500, 400, 25_000));
+        flights.flightsDB.put("XF-45", new Flight("XF-45", "Ghom", "KermanShah", "1402-06-25", 500, 1200, 125_000));
         users.addUser("test", "test");
         users.usersDB.get("test").changeBalance(200_000_000);
     }
 
+    /**
+     * Menu for the Sign-In page
+     */
+    private void printSignInMenu() {
+        System.out.printf("""
+                                  %56c-------------------------
+                                  %56c|                       |
+                                  %56c|       %s Sign in%s        |
+                                  %56c|                       |
+                                  %56c-------------------------
+                                  %56c
+                                  %56c   1 - Login as Admin
+                                  %56c
+                                  %56c   2 - Login as User
+                                  %56c
+                                  %56c   0 - Main menu
+                                  %56c
+                                  %56c >>""" + ' ', ' ', ' ', ' ', CColors.CYAN, CColors.RESET, ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ');
+    }
+
+    /**
+     * Sign in page
+     */
     public void signInPage() {
         int option = -1;
         while (option != 0) {
             App.clearScreen();
-            System.out.printf("""
-                                      %56c-------------------------
-                                      %56c|                       |
-                                      %56c|       %s Sign in%s        |
-                                      %56c|                       |
-                                      %56c-------------------------
-                                      %56c
-                                      %56c   1 - Login as Admin
-                                      %56c
-                                      %56c   2 - Login as User
-                                      %56c
-                                      %56c   0 - Main menu
-                                      %56c
-                                      %56c >>""" + ' ', ' ', ' ', ' ', CColors.CYAN, CColors.RESET, ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ');
+            printSignInMenu();
             option = App.getIntInput();
             switch (option) {
-                case 1 -> new AdminPanel(flights);
+                case 1 -> {
+                    System.out.printf("\n%56cInput the admin password: %s", ' ', CColors.CYAN);
+                    if (scanner.next().equals("Admin")) {
+                        System.out.print(CColors.RESET);
+                        new AdminPanel(flights, tickets);
+                    } else {
+                        System.out.printf("%60c%s!! Your password is incorrect !!%s", ' ', CColors.RED, CColors.RESET);
+                        App.rest();
+                    }
+                }
                 case 2 -> searchListMenu();
                 case 0 -> {/* Nothing to see here */}
                 default -> App.printInvalidInput();
@@ -46,6 +71,10 @@ public class DataBase {
         }
     }
 
+    /**
+     * Checks for the correct username and password
+     * Lastly it moves to the user's panel
+     */
     public void searchListMenu() {
         System.out.printf("\n%56cEnter your username:%s ", ' ', CColors.CYAN);
         String username = scanner.next();
@@ -54,13 +83,16 @@ public class DataBase {
         System.out.println(CColors.RESET);
         username = username.toLowerCase();
         if (users.isUserPassCorrect(username, password)) {
-            new UserPanel(users.usersDB.get(username), flights);
+            new UserPanel(users.usersDB.get(username), flights, tickets);
         } else {
-            System.out.printf("%40c!! Either your username ( %s ) or password ( %s ) is wrong !!", ' ', CColors.RED + username + CColors.RESET, CColors.RED + password + CColors.RESET);
+            System.out.printf("%40c!! Either your username ( %s ) or password ( %s ) is incorrect !!", ' ', CColors.RED + username + CColors.RESET, CColors.RED + password + CColors.RESET);
             App.rest();
         }
     }
 
+    /**
+     * Makes a new user entry
+     */
     public void makeNewUser() {
         App.clearScreen();
         System.out.printf("""
@@ -82,6 +114,11 @@ public class DataBase {
         App.rest();
     }
 
+    /**
+     * Makes sure the username is in correct format
+     *
+     * @return Corrected Username
+     */
     private String usernameInput() {
         String tempUsername = scanner.next();
         while (users.usersDB.containsKey(tempUsername)) {
@@ -95,6 +132,11 @@ public class DataBase {
         return tempUsername;
     }
 
+    /**
+     * Makes sure the password is in correct format
+     *
+     * @return Corrected password
+     */
     private String passwordInput() {
         String tempPass;
         System.out.printf("""

@@ -1,5 +1,4 @@
 public class Flight {
-    public boolean isModified = false;
     private String flightID, origin, destination, date;
     private int availableSeats;
     private int time;
@@ -63,9 +62,8 @@ public class Flight {
         this.availableSeats = availableSeats;
     }
 
-    public void reduceAvailableSeats(int byAmount) {
-        availableSeats -= byAmount;
-        isModified = true;
+    public void changeAvailableSeats(int byAmount) {
+        availableSeats += byAmount;
     }
 
     public int getPrice() {
@@ -76,6 +74,11 @@ public class Flight {
         this.price = price;
     }
 
+    /**
+     * Turn integer time to string and makes sure the zeros stay
+     * @param time time given in ____ integer form
+     * @return Formatted string as __:__
+     */
     private String turnTimeToString(int time) {
         if (time == 0) return "00:00";
 
@@ -98,6 +101,6 @@ public class Flight {
 
     @Override
     public String toString() {
-        return String.format("%31c %-4s | %-15s | %-15s | %-10s | %,-10d |  %-5s  | %,5d\n", ' ', flightID, origin, destination, date, price, turnTimeToString(time), availableSeats);
+        return String.format("%31c %-4s | %-15s | %-15s | %-10s | %,-10d  | %-5s  | %-,5d\n", ' ', flightID, origin, destination, date, price, turnTimeToString(time), availableSeats);
     }
 }
