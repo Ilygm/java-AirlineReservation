@@ -8,7 +8,7 @@ This project aims to simulate a terminal-based airline reservation system.
 
 2. Open src folder 
 
-3. Right click on an empty space inside the folder
+3. Right-click on an empty space inside the folder
 
 4. Choose "Open in Terminal"
 

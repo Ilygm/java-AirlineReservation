@@ -2,7 +2,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 public class Flights {
-    public HashMap<String, Flight> flightsDB = new HashMap<>();
+    public final HashMap<String, Flight> flightsDB = new HashMap<>();
 
     public void addFlight(Flight flight) {
         flightsDB.put(flight.getFlightID(), flight);

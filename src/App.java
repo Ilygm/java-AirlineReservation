@@ -1,9 +1,11 @@
+import java.io.IOException;
 import java.util.Scanner;
 import java.util.concurrent.TimeUnit;
 
 public class App {
-    public static void main(String[] args) {
+    public static void main(String[] args) throws IOException {
         DataBase db = new DataBase();
+        db.readSerializedData();
         int option = -1;
         while (option != 0) {
             clearScreen();
@@ -12,7 +14,7 @@ public class App {
             switch (option) {
                 case 1 -> db.signInPage();
                 case 2 -> db.makeNewUser();
-                case 0 -> {/* Nothing :) */}
+                case 0 -> db.writeSerializedData();
                 default -> printInvalidInput();
             }
         }

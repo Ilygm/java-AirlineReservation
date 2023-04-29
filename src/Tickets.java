@@ -1,7 +1,7 @@
 import java.util.ArrayList;
 
 public class Tickets {
-    public ArrayList<Ticket> ticketsDB = new ArrayList<>();
+    public final ArrayList<Ticket> ticketsDB = new ArrayList<>();
 
 /*
     THIS FUNCTION IS WORKING BUT IT'S NOT USED CURRENTLY
