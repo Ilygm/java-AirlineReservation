@@ -1,8 +1,6 @@
 import java.io.*;
 import java.util.Scanner;
 
-import static java.lang.System.exit;
-
 public class DataBase {
     // Initialization of database
     public final Users users = new Users();
@@ -160,7 +158,7 @@ public class DataBase {
         if (!dataFile.exists()) {
             if (!dataFile.createNewFile()) {
                 System.err.print(" FAILED TO MAKE DATA FILE ");
-                exit(80);
+                System.exit(80);
             }
         } else {
             ObjectInputStream iStream = new ObjectInputStream(new FileInputStream(dataFile));
@@ -175,7 +173,7 @@ public class DataBase {
                 }
             } catch (ClassNotFoundException err) {
                 System.out.print(err.getMessage());
-                exit(80);
+                System.exit(80);
             } catch (EOFException err) {/* NOTHING */}
             iStream.close();
         }
@@ -195,7 +193,7 @@ public class DataBase {
             }
         } catch (IOException e) {
             System.err.print(e.getMessage());
-            exit(80);
+            System.exit(80);
         }
         oStream.close();
     }
