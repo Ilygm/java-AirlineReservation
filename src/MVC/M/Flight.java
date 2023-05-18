@@ -1,7 +1,10 @@
+package MVC.M;
+
 public class Flight {
     private String flightID, origin, destination, date;
     private int availableSeats;
     private int time;
+
     private int price;
 
     public Flight(String flightID, String origin, String destination, String date, int time, int availableSeats, int price) {
@@ -74,8 +77,23 @@ public class Flight {
         this.price = price;
     }
 
+    @Override
+    public boolean equals(Object obj) {
+        if (obj instanceof Flight flight) {
+            if (!(flight.getOrigin().equals(origin) || flight.getOrigin() == null)) return false;
+            if (!(flight.getDestination().equals(destination) || flight.getDestination() == null)) return false;
+            if (!(flight.getDate().equals(date) || flight.getDate() == null)) return false;
+            if (!(flight.getAvailableSeats() == availableSeats || flight.getAvailableSeats() == -1)) return false;
+            if (!(flight.getTime() == time || flight.getTime() == -1)) return false;
+            if (!(flight.getPrice() == price || flight.getPrice() == -1)) return false;
+
+            return true;
+        } else return false;
+    }
+
     /**
      * Turn integer time to string and makes sure the zeros stay
+     *
      * @param time time given in ____ integer form
      * @return Formatted string as __:__
      */

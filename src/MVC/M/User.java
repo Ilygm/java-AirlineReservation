@@ -1,7 +1,6 @@
-import java.util.ArrayList;
+package MVC.M;
 
 public class User {
-    public final ArrayList<Flight> boughtFlights = new ArrayList<>();
     private final String username;
     private String password;
     private int balance = 0;
@@ -29,5 +28,11 @@ public class User {
 
     public void changeBalance(int byAmount) {
         this.balance += byAmount;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (obj instanceof User user) return user.getUsername().equals(username);
+        else return false;
     }
 }
