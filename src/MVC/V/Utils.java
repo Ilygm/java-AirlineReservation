@@ -4,11 +4,19 @@ import java.util.Scanner;
 
 public class Utils {
     private static final Scanner cinScanner = new Scanner(System.in);
+
     public static int getInt() {
         try {
             return Integer.parseInt(cinScanner.nextLine());
         } catch (NumberFormatException e) {
-            return -25;
+            return -1;
+        }
+    }
+    public static double getDouble() {
+        try {
+            return Double.parseDouble(cinScanner.nextLine());
+        } catch (NumberFormatException e) {
+            return -1;
         }
     }
 
@@ -33,9 +41,9 @@ public class Utils {
         return output;
     }
 
-    public static void waitFor(int miliseconds) {
+    public static void waitFor(int milliseconds) {
         try {
-            Thread.sleep(miliseconds);
+            Thread.sleep(milliseconds);
         } catch (InterruptedException e) {
             e.printStackTrace();
             System.exit(85);

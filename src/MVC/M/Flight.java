@@ -80,12 +80,12 @@ public class Flight {
     @Override
     public boolean equals(Object obj) {
         if (obj instanceof Flight flight) {
-            if (!(flight.getOrigin().equals(origin) || flight.getOrigin() == null)) return false;
-            if (!(flight.getDestination().equals(destination) || flight.getDestination() == null)) return false;
-            if (!(flight.getDate().equals(date) || flight.getDate() == null)) return false;
-            if (!(flight.getAvailableSeats() == availableSeats || flight.getAvailableSeats() == -1)) return false;
-            if (!(flight.getTime() == time || flight.getTime() == -1)) return false;
-            if (!(flight.getPrice() == price || flight.getPrice() == -1)) return false;
+            if (!(flight.getOrigin() == null || flight.getOrigin().equalsIgnoreCase(origin))) return false;
+            if (!(flight.getDestination() == null || flight.getDestination().equalsIgnoreCase(destination))) return false;
+            if (!(flight.getDate() == null || flight.getDate().equalsIgnoreCase(date))) return false;
+            if (!(flight.getAvailableSeats() == -1 || flight.getAvailableSeats() == availableSeats)) return false;
+            if (!(flight.getTime() == -1 || flight.getTime() == time)) return false;
+            if (!(flight.getPrice() == -1 || flight.getPrice() > price)) return false;
 
             return true;
         } else return false;
@@ -119,6 +119,6 @@ public class Flight {
 
     @Override
     public String toString() {
-        return String.format("%31c %-4s | %-15s | %-15s | %-10s | %,-10d  | %-5s  | %-,5d\n", ' ', flightID, origin, destination, date, price, turnTimeToString(time), availableSeats);
+        return String.format(" %-4s | %-15s | %-15s | %-10s | %,-10d  | %-5s  | %-,5d\n", flightID, origin, destination, date, price, turnTimeToString(time), availableSeats);
     }
 }

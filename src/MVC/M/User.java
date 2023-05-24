@@ -26,7 +26,7 @@ public class User {
         return balance;
     }
 
-    public void changeBalance(int byAmount) {
+    public void changeBalance(double byAmount) {
         this.balance += byAmount;
     }
 

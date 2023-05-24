@@ -12,12 +12,16 @@ public class Users extends MapHandler<String, User> {
         return false;
     }
 
-    public User makeTempUser(String username, String password) {
+    public static User makeTempUser(String username, String password) {
         return new User(username, password);
     }
 
-    public double getUserBalance(String username) {
-        return findEntry(username).getBalance();
+    public double getUserBalance(User user) {
+        return findEntry(user.getUsername()).getBalance();
+    }
+
+    public void addUserBalance(User user, double amount) {
+        findEntry(user.getUsername()).changeBalance(amount);
     }
 
     public String getUserInfo(User user) {
@@ -25,4 +29,9 @@ public class Users extends MapHandler<String, User> {
         if (tempUser != null && tempUser.getPassword().equals(user.getPassword())) return tempUser.toString();
         else return null;
     }
+
+    public void changeUsersPass(User user, String newPass) {
+        findEntry(user.getUsername()).setPassword(newPass);
+    }
+
 }
