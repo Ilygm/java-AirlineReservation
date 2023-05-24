@@ -3,7 +3,7 @@ package MVC.M;
 public class User {
     private final String username;
     private String password;
-    private int balance = 0;
+    private double balance = 0;
 
     public User(String username, String password) {
         this.username = username;
@@ -22,7 +22,7 @@ public class User {
         this.password = password;
     }
 
-    public int getBalance() {
+    public double getBalance() {
         return balance;
     }
 
@@ -32,7 +32,12 @@ public class User {
 
     @Override
     public boolean equals(Object obj) {
-        if (obj instanceof User user) return user.getUsername().equals(username);
+        if (obj instanceof User user) return user.getUsername().equalsIgnoreCase(username);
         else return false;
+    }
+
+    @Override
+    public String toString() {
+        return String.format("%s,%f", username, balance);
     }
 }

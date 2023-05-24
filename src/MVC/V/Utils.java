@@ -3,10 +3,8 @@ package MVC.V;
 import java.util.Scanner;
 
 public class Utils {
-
-    private final Scanner cinScanner = new Scanner(System.in);
-
-    public int getInt() {
+    private static final Scanner cinScanner = new Scanner(System.in);
+    public static int getInt() {
         try {
             return Integer.parseInt(cinScanner.nextLine());
         } catch (NumberFormatException e) {
@@ -14,23 +12,33 @@ public class Utils {
         }
     }
 
-    public void clearScreen() {
+    public static void clearScreen() {
         System.out.print("\033[H\033[2J");
         System.out.flush();
     }
 
-    public void printMissInputWarning() {
-        printMessage(60, "!! Miss Input Detected !!", AnsiColor.FOREGROUND_BRIGHT_RED);
+    public static void printMissInputWarning() {
+        printMessage(60, "!! Miss Input Detected !!", AnsiColor.FOREGROUND_BRIGHT_RED, 1500);
     }
 
-    public void printMessage(int leftOffset, String line, String color) {
-        System.out.printf("%s%s%s%s", " ".repeat(leftOffset), color, line, AnsiColor.RESET_COLOR);
+    public static void printMessage(int leftOffset, String line, String color, int timerInMilli) {
+        System.out.printf("%s%s%s%s", " ".repeat(leftOffset), color, line + '\n', AnsiColor.RESET_COLOR);
+        waitFor(timerInMilli);
     }
 
-    public String getString(int leftOffset, String line, String mainColor, String inputColor) {
+    public static String getString(int leftOffset, String line, String mainColor, String inputColor) {
         System.out.printf("%s%s%s%s", " ".repeat(leftOffset), mainColor, line, inputColor);
         String output = cinScanner.nextLine();
         System.out.print(AnsiColor.RESET_COLOR);
         return output;
+    }
+
+    public static void waitFor(int miliseconds) {
+        try {
+            Thread.sleep(miliseconds);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+            System.exit(85);
+        }
     }
 }
