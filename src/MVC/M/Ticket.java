@@ -11,4 +11,9 @@ public record Ticket(Flight flight, User user, String ticketID) {
         }
         return false;
     }
+
+    @Override
+    public String toString() {
+        return String.format("%36c%s --> %s\n%36c%s", ' ',ticketID, user.getUsername(), ' ',flight);
+    }
 }

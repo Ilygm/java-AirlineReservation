@@ -16,12 +16,28 @@ public class Flights extends MapHandler<String, Flight> {
         database.put("FX-45", new Flight("FX-45", "KermanShah", "Ghom", "1402-05-25", 500, 400, 25_000));
         database.put("XF-45", new Flight("XF-45", "Ghom", "KermanShah", "1402-06-25", 500, 1200, 125_000));
     }
-    
+
+
     public static Flight makeTempFlight(String flightID, String origin, String destination, String date, int time, int availableSeats, int price) {
         return new Flight(flightID, origin, destination, date, time, availableSeats, price);
     }
 
+    public static Flight makeTempFlight(String flightID) {
+        return new Flight(flightID, null, null, null, -1, -1, -1);
+    }
+
     public String[] parseFiltered(Flight flight) {
         return filterEntries(flight).stream().map(Flight::toString).collect(Collectors.joining(",,")).split(",,");
+    }
+
+    public boolean reduceOneSeat(String flightID) {
+        if (findEntry(flightID).getAvailableSeats() > 0) {
+            findEntry(flightID).changeAvailableSeats(-1);
+            return true;
+        } else return false;
+    }
+
+    public int returnFlightPrice(String flightID) {
+        return findEntry(flightID).getPrice();
     }
 }

@@ -85,7 +85,7 @@ public class Flight {
             if (!(flight.getDate() == null || flight.getDate().equalsIgnoreCase(date))) return false;
             if (!(flight.getAvailableSeats() == -1 || flight.getAvailableSeats() == availableSeats)) return false;
             if (!(flight.getTime() == -1 || flight.getTime() == time)) return false;
-            if (!(flight.getPrice() == -1 || flight.getPrice() > price)) return false;
+            if (!(flight.getPrice() == -1 || flight.getPrice() >= price)) return false;
 
             return true;
         } else return false;

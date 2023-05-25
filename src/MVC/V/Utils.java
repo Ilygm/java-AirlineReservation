@@ -30,7 +30,7 @@ public class Utils {
     }
 
     public static void printMessage(int leftOffset, String line, String color, int timerInMilli) {
-        System.out.printf("%s%s%s%s", " ".repeat(leftOffset), color, line + '\n', AnsiColor.RESET_COLOR);
+        System.out.printf("%s%s%s%s", " ".repeat(leftOffset), color, line, AnsiColor.RESET_COLOR);
         waitFor(timerInMilli);
     }
 

@@ -4,6 +4,7 @@ public class Users extends MapHandler<String, User> {
 
     {
         addEntry("User", new User("User", "Pass"));
+        findEntry("User").changeBalance(2000000);
     }
 
     public boolean login(User user) {
@@ -34,4 +35,10 @@ public class Users extends MapHandler<String, User> {
         findEntry(user.getUsername()).setPassword(newPass);
     }
 
+    public boolean reduceUserBalance (String username, double price) {
+        if (findEntry(username).getBalance() >= price) {
+            findEntry(username).changeBalance(-price);
+            return true;
+        } else return false;
+    }
 }

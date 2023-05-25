@@ -2,9 +2,9 @@ package MVC.C;
 
 import MVC.M.Users;
 
-public class UserController {
+public class UserController{
 
-    private final Users users = new Users();
+    protected final Users users = new Users();
 
     public boolean checkUserCredentials(String username, String password) {
         return users.login(Users.makeTempUser(username, password));
@@ -20,5 +20,9 @@ public class UserController {
 
     public void setNewPass(String username, String newPass) {
         users.changeUsersPass(Users.makeTempUser(username, null), newPass);
+    }
+
+    public boolean reduceUserBalance(String username, int price) {
+        return users.reduceUserBalance(username, price);
     }
 }
