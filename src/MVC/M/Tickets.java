@@ -23,7 +23,11 @@ public class Tickets extends MapHandler<String, Ticket> {
         } else return false;
     }
 
-    public boolean removeTicket(String ticketID) {
-        return removeEntry(ticketID);
+    public void removeTicket(String ticketID) {
+        removeEntry(ticketID);
+    }
+
+    public void removeFlight(String flightID) {
+        filterEntries(new Ticket(Flights.makeTempFlight(flightID), null, null)).forEach(v -> removeTicket(v.ticketID()));
     }
 }

@@ -1,7 +1,10 @@
 package MVC.M;
 
 public class Flight {
-    private String flightID, origin, destination, date;
+    private final String flightID;
+    private String origin;
+    private String destination;
+    private String date;
     private int availableSeats;
     private int time;
 
@@ -19,10 +22,6 @@ public class Flight {
 
     public String getFlightID() {
         return flightID;
-    }
-
-    public void setFlightID(String flightID) {
-        this.flightID = flightID;
     }
 
     public String getOrigin() {
@@ -80,6 +79,7 @@ public class Flight {
     @Override
     public boolean equals(Object obj) {
         if (obj instanceof Flight flight) {
+            if (!(flight.getFlightID() == null) && flight.getFlightID().equalsIgnoreCase(flightID)) return true;
             if (!(flight.getOrigin() == null || flight.getOrigin().equalsIgnoreCase(origin))) return false;
             if (!(flight.getDestination() == null || flight.getDestination().equalsIgnoreCase(destination))) return false;
             if (!(flight.getDate() == null || flight.getDate().equalsIgnoreCase(date))) return false;

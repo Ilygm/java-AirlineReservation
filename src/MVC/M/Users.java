@@ -17,6 +17,7 @@ public class Users extends MapHandler<String, User> {
         return new User(username, password);
     }
 
+    @SuppressWarnings("unused")
     public double getUserBalance(User user) {
         return findEntry(user.getUsername()).getBalance();
     }

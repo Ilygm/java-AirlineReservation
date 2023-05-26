@@ -1,7 +1,6 @@
 package MVC.V;
 
-import MVC.C.AdminController;
-import MVC.C.UserController;
+import MVC.C.*;
 
 enum MainMenu {
     SIGN_IN("Sign in"),
@@ -60,7 +59,9 @@ enum MainMenu {
 public class App {
     private final UserController userController = new UserController();
     private final AdminController adminController = new AdminController();
-
+    private final FlightController flightController = new FlightController();
+    private final TicketController ticketController = new TicketController();
+    private final Root root = new Root(flightController, userController, ticketController);
     public void mainMenu() {
         while (true) {
             Utils.clearScreen();
@@ -78,6 +79,7 @@ public class App {
     }
 
     private void signUp() {
+        // TODO: 5/26/2023
     }
 
     public void signIn() {
@@ -115,12 +117,14 @@ public class App {
         System.out.println();
         String tempUsername = Utils.getString(63, "Input username: ", "", AnsiColor.FOREGROUND_BRIGHT_GREEN);
         String tempPassword = Utils.getString(63, "Input password: ", "", AnsiColor.FOREGROUND_BRIGHT_GREEN);
-        if (isAdmin && adminController.checkAdminPassword(tempUsername, tempPassword)) {
-            // TODO: 5/21/23 ADMIN PANEL
-            return;
+        if (isAdmin) {
+            if (adminController.checkAdminPassword(tempUsername, tempPassword)) {
+                new AdminPanel(tempUsername, flightController, root);
+                return;
+            }
         } else {
             if (userController.checkUserCredentials(tempUsername, tempPassword)) {
-                new UserPanel(tempUsername, tempPassword);
+                new UserPanel(userController, flightController, ticketController, root, tempUsername, tempPassword);
                 return;
             }
         }

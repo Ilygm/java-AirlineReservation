@@ -42,16 +42,20 @@ enum UserPanelMenu {
 
 public class UserPanel {
 
-    private final UserController userController = new UserController();
-    private final FlightController flightController = new FlightController();
-    private final TicketController ticketController = new TicketController();
+    private final UserController userController;
+    private final FlightController flightController;
+    private final TicketController ticketController;
 
-    private final Root root = new Root(flightController, userController, ticketController);
+    private final Root root;
     private String username;
     private String password;
     private double userBalance;
 
-    public UserPanel(String username, String password) {
+    public UserPanel(UserController userController, FlightController flightController, TicketController ticketController, Root root, String username, String password) {
+        this.userController = userController;
+        this.flightController = flightController;
+        this.ticketController = ticketController;
+        this.root = root;
         this.username = username;
         this.password = password;
         showMenu();
@@ -160,6 +164,7 @@ public class UserPanel {
         String tempString = Utils.getString(40, "Provide a date (exp. yyyy-mm-dd): ", "", "");
         while (!tempString.matches("^\\d\\d\\d\\d-[0-1]\\d-[0-3]\\d$")) {
             Utils.printMissInputWarning();
+            System.out.println();
             tempString = Utils.getString(40, "Provide a date (exp. yyyy-mm-dd): ", "", "");
         }
         return tempString;
@@ -194,9 +199,9 @@ public class UserPanel {
             usersTickets = ticketController.getUsersTickets(username);
             for (String usersTicket : usersTickets) System.out.println(usersTicket);
             System.out.printf("""
-                    %57c 1 - Cancel ticket
-                    %57c 0 - Go back
-                    %56c>>""" + " ", ' ', ' ', ' ');
+                                      %57c 1 - Cancel ticket
+                                      %57c 0 - Go back
+                                      %56c>>""" + " ", ' ', ' ', ' ');
             switch (Utils.getInt()) {
                 case 1 -> {
                     String ticketID = Utils.getString(50, "Enter ticketsID: ", "", AnsiColor.FOREGROUND_GREEN92);
@@ -209,7 +214,9 @@ public class UserPanel {
                     }
                     Utils.printMessage(57, "!! Unable to find ticketID !!", AnsiColor.FOREGROUND_RED91, 1500);
                 }
-                case 0 -> { return; }
+                case 0 -> {
+                    return;
+                }
             }
         }
     }

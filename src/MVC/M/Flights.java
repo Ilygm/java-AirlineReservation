@@ -40,4 +40,9 @@ public class Flights extends MapHandler<String, Flight> {
     public int returnFlightPrice(String flightID) {
         return findEntry(flightID).getPrice();
     }
+
+    public boolean addFlight(String flightID, String origin, String destination, String date, int time, int availableSeats, int price) {
+        Flight tempFlight = new Flight(flightID, origin, destination, date, time, availableSeats, price);
+        return addEntry(flightID, tempFlight);
+    }
 }

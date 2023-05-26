@@ -25,4 +25,10 @@ public class Root {
         flights.findEntry(tickets.findEntry(ticketID).flight().getFlightID()).changeAvailableSeats(1);
         tickets.removeTicket(ticketID);
     }
+
+    public void removeFlight(String flightID) {
+        tickets.usersInFlight(Flights.makeTempFlight(flightID)).forEach(v -> users.addUserBalance(v.user() ,v.flight().getPrice()));
+        tickets.removeFlight(flightID);
+        flights.removeEntry(flightID);
+    }
 }

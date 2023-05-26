@@ -14,11 +14,8 @@ public abstract class MapHandler<K, T> {
         return true;
     }
 
-    public boolean removeEntry(K k) {
-        if (database.containsKey(k)) {
-            database.remove(k);
-            return true;
-        } else return false;
+    public void removeEntry(K k) {
+        database.remove(k);
     }
 
     public T findEntry(K k) {
