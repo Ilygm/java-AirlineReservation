@@ -25,4 +25,12 @@ public class UserController{
     public boolean reduceUserBalance(String username, int price) {
         return users.reduceUserBalance(username, price);
     }
+
+    public void addUser(String username, String password) {
+        users.addEntry(username, Users.makeTempUser(username, password));
+    }
+
+    public boolean doesUserExist(String username) {
+        return users.entryExists(username);
+    }
 }
