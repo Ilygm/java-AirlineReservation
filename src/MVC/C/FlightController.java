@@ -2,28 +2,54 @@ package MVC.C;
 
 import MVC.M.Flights;
 
+import java.io.IOException;
+
 public class FlightController {
 
     protected final Flights flights = new Flights();
 
     public String[] filterFlights(String flightID, String origin, String destination, String date, int time, int availableSeats, int price) {
-        return flights.parseFiltered(Flights.makeTempFlight(flightID, origin, destination, date, time, availableSeats, price));
+        try {
+            return flights.parseFiltered(Flights.makeTempFlight(flightID, origin, destination, date, time, availableSeats, price));
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     public boolean doesFlightExist(String flightID) {
-        return flights.entryExists(flightID);
+        try {
+            return flights.doesFlightExist(flightID);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     public boolean reduceOneSeats(String flightID) {
-        return flights.reduceOneSeat(flightID);
+        try {
+            int availableSeats = flights.getFlight(flightID).getAvailableSeats();
+            if (availableSeats != 0) {
+                flights.overrideFlight(flights.getFlight(flightID).changeAvailableSeats(-1));
+                return true;
+            } else return false;
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     public int getFlightPrice(String flightID) {
-        return flights.returnFlightPrice(flightID);
+        try {
+            return flights.returnFlightPrice(flightID);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     public String getFlight(String flightID) {
-        return flights.findEntry(flightID).toString();
+        try {
+            return flights.getFlight(flightID).toString();
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     public boolean registerNewFlight(String flightID, String origin, String destination, String date, int time, int availableSeats, int price) {
@@ -31,27 +57,51 @@ public class FlightController {
     }
 
     public void changeOrigin(String flightID, String origin) {
-        flights.findEntry(flightID).setOrigin(origin);
+        try {
+            flights.overrideFlight(flights.getFlight(flightID).setOrigin(origin));
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     public void changeDestination(String flightID, String destination) {
-        flights.findEntry(flightID).setDestination(destination);
+        try {
+            flights.overrideFlight(flights.getFlight(flightID).setDestination(destination));
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     public void changeDate(String flightID, String date) {
-        flights.findEntry(flightID).setDate(date);
+        try {
+            flights.overrideFlight(flights.getFlight(flightID).setDate(date));
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     public void changeTime(String flightID, int time) {
-        flights.findEntry(flightID).setTime(time);
+        try {
+            flights.overrideFlight(flights.getFlight(flightID).setTime(time));
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     public void changeSeats(String flightID, int seats) {
-        flights.findEntry(flightID).setAvailableSeats(seats);
+        try {
+            flights.overrideFlight(flights.getFlight(flightID).setAvailableSeats(seats));
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     public void changePrice(String flightID, int price) {
-        flights.findEntry(flightID).setPrice(price);
+        try {
+            flights.overrideFlight(flights.getFlight(flightID).setPrice(price));
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
     }
 
 }

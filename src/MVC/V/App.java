@@ -81,8 +81,8 @@ public class App {
             printSignIn();
             System.out.printf("%61c      >> ", ' ');
             switch (Utils.getInt()) {
-                case 1 -> getUserCredential(true); // TODO: 5/19/2023
-                case 2 -> getUserCredential(false); // TODO: 5/19/2023
+                case 1 -> getUserCredential(true);
+                case 2 -> getUserCredential(false);
                 case 0 -> {
                     return;
                 }

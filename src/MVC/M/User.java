@@ -1,6 +1,8 @@
 package MVC.M;
 
 public class User {
+    public static long USER_SIZE = 57;
+    public static long USERNAME_SIZE = 15;
     private final String username;
     private String password;
     private double balance = 0;
@@ -18,16 +20,18 @@ public class User {
         return password;
     }
 
-    public void setPassword(String password) {
+    public User setPassword(String password) {
         this.password = password;
+        return this;
     }
 
     public double getBalance() {
         return balance;
     }
 
-    public void changeBalance(double byAmount) {
+    public User changeBalance(double byAmount) {
         this.balance += byAmount;
+        return this;
     }
 
     @Override
@@ -39,5 +43,9 @@ public class User {
     @Override
     public String toString() {
         return String.format("%s,%f", username, balance);
+    }
+
+    public String userToDataLine() {
+        return String.format("%15s|%25s|%15s", username, password, balance);
     }
 }

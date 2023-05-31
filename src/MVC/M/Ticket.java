@@ -1,11 +1,13 @@
 package MVC.M;
 
-public record Ticket(Flight flight, User user, String ticketID) {
+public record Ticket(String flightID, String username, String ticketID) {
+    public static long TICKET_SIZE = 42;
+
     @Override
     public boolean equals(Object o) {
         if (o instanceof Ticket ticket) {
-            if (!(ticket.flight() == null || ticket.flight().equals(flight))) return false;
-            if (!(ticket.user() == null || ticket.user().equals(user))) return false;
+            if (!(ticket.flightID() == null || ticket.flightID().equals(flightID))) return false;
+            if (!(ticket.username() == null || ticket.username().equals(username))) return false;
             if (!(ticket.ticketID() == null || ticket.ticketID().equals(ticketID))) return false;
             return true;
         }
@@ -14,6 +16,10 @@ public record Ticket(Flight flight, User user, String ticketID) {
 
     @Override
     public String toString() {
-        return String.format("%36c%s --> %s\n%36c%s", ' ',ticketID, user.getUsername(), ' ',flight);
+        return String.format("[ %36c%s --> %s ] ==> %s", ' ',ticketID, username, flightID);
+    }
+
+    public String turnToDataLine() {
+        return String.format("%5s|%15s|%20s", flightID, username, ticketID);
     }
 }

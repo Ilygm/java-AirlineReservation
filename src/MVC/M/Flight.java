@@ -1,13 +1,14 @@
 package MVC.M;
 
 public class Flight {
+    public static long FLIGHT_SIZE = 90;
+    public static long FLIGHT_ID_SIZE = 5;
     private final String flightID;
     private String origin;
     private String destination;
     private String date;
     private int availableSeats;
     private int time;
-
     private int price;
 
     public Flight(String flightID, String origin, String destination, String date, int time, int availableSeats, int price) {
@@ -20,6 +21,10 @@ public class Flight {
         this.price = price;
     }
 
+    public String flightToDataLine() {
+        return String.format("%5s|%25s|%25s|%10s|%5s|%4s|%10s", flightID, origin, destination, date, availableSeats, time, price);
+    }
+
     public String getFlightID() {
         return flightID;
     }
@@ -28,52 +33,59 @@ public class Flight {
         return origin;
     }
 
-    public void setOrigin(String origin) {
+    public Flight setOrigin(String origin) {
         this.origin = origin;
+        return this;
     }
 
     public String getDestination() {
         return destination;
     }
 
-    public void setDestination(String destination) {
+    public Flight setDestination(String destination) {
         this.destination = destination;
+        return this;
     }
 
     public String getDate() {
         return date;
     }
 
-    public void setDate(String date) {
+    public Flight setDate(String date) {
         this.date = date;
+        return this;
     }
 
     public int getTime() {
         return time;
     }
 
-    public void setTime(int time) {
+    public Flight setTime(int time) {
         this.time = time;
+        return this;
     }
 
     public int getAvailableSeats() {
         return availableSeats;
     }
 
-    public void setAvailableSeats(int availableSeats) {
+    public Flight setAvailableSeats(int availableSeats) {
         this.availableSeats = availableSeats;
+        return this;
     }
 
-    public void changeAvailableSeats(int byAmount) {
+    public Flight changeAvailableSeats(int byAmount) {
         availableSeats += byAmount;
+        return this;
     }
 
     public int getPrice() {
         return price;
     }
 
-    public void setPrice(int price) {
+    public Flight setPrice(int price) {
         this.price = price;
+        return this;
     }
 
     @Override
@@ -81,7 +93,8 @@ public class Flight {
         if (obj instanceof Flight flight) {
             if (!(flight.getFlightID() == null) && flight.getFlightID().equalsIgnoreCase(flightID)) return true;
             if (!(flight.getOrigin() == null || flight.getOrigin().equalsIgnoreCase(origin))) return false;
-            if (!(flight.getDestination() == null || flight.getDestination().equalsIgnoreCase(destination))) return false;
+            if (!(flight.getDestination() == null || flight.getDestination().equalsIgnoreCase(destination)))
+                return false;
             if (!(flight.getDate() == null || flight.getDate().equalsIgnoreCase(date))) return false;
             if (!(flight.getAvailableSeats() == -1 || flight.getAvailableSeats() == availableSeats)) return false;
             if (!(flight.getTime() == -1 || flight.getTime() == time)) return false;
