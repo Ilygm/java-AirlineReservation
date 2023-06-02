@@ -13,3 +13,5 @@ This project aims to simulate a terminal-based airline reservation system.
 4. Choose "Open in Terminal"
 
 5. Type "Run" and press enter
+
+!! Make sure a folder named 'Data' is available !!
