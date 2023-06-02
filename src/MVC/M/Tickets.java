@@ -7,7 +7,7 @@ import java.util.stream.Collectors;
 
 public class Tickets extends FileWriter{
     public Tickets() {
-        super(Ticket.TICKET_SIZE, "Tickets.dat");
+        super(Ticket.TICKET_SIZE, ".\\Data\\Tickets.dat");
     }
 
     public List<Ticket> usersInFlight(Flight flight) throws IOException {
@@ -22,20 +22,29 @@ public class Tickets extends FileWriter{
         return list.stream().map(Ticket::toString).collect(Collectors.joining(",,")).split(",,");
     }
 
-    public boolean addTicket(User user, Flight flight) {
+    public boolean addTicket(User user, Flight flight) throws IOException {
         if (user != null && flight != null && flight.getAvailableSeats() > 0) {
+            for (Ticket ticket : flightsForUser(user))
+                if (ticket.flightID().equals(flight.getFlightID()))
+                    return false;
             Ticket tempTicket = new Ticket(flight.getFlightID(), user.getUsername(), flight.getAvailableSeats() + "_" + user.getUsername());
             appendRecord(tempTicket.turnToDataLine());
             return true;
         } else return false;
     }
 
-    public void removeTicket(String ticketID) {
-        removeEntry(ticketID);
+    public void removeTicket(String ticketID) throws IOException {
+        removeDataLine(findFieldSpecific(22, 20, ticketID));
     }
 
     public void removeFlight(String flightID) throws IOException {
-        filterEntries(new Ticket(flightID, null, null)).forEach(v -> removeTicket(v.ticketID()));
+        filterEntries(new Ticket(flightID, null, null)).forEach(v -> {
+            try {
+                removeTicket(v.ticketID());
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
+        });
     }
 
     public List<Ticket> filterEntries(Ticket ticket) throws IOException {

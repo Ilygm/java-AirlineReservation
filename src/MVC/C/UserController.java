@@ -25,7 +25,7 @@ public class UserController{
     }
 
     public void addBalanceToUser(String username, double amount) {
-        users.addUserBalance(Users.makeTempUser(username, null), amount);
+        users.addUserBalance(username, amount);
     }
 
     public void setNewPass(String username, String newPass) {

@@ -21,7 +21,7 @@ public class Flights extends FileWriter {
     }
 
     public Flights() {
-        super(Flight.FLIGHT_SIZE, "Flight.dat");
+        super(Flight.FLIGHT_SIZE, ".\\Data\\Flights.dat");
     }
 
     public static Flight makeTempFlight(String flightID, String origin, String destination, String date, int time, int availableSeats, int price) {
@@ -61,17 +61,17 @@ public class Flights extends FileWriter {
         int idx = findFieldSpecific(0, 5, flightID);
         if (idx != -1) {
             String dataLine = readRecord(findFieldSpecific(0, 5, flightID));
-            randFile.close();
             return dataLineToFlight(dataLine);
-        } else {
-            randFile.close();
+        } else
             return null;
-        }
     }
 
     public boolean doesFlightExist(String flightID) throws IOException {
         int status = findFieldSpecific(0, 5, flightID);
-        randFile.close();
         return status != -1;
+    }
+
+    public void removeFlight(String flightID) throws IOException {
+        removeDataLine(findFieldSpecific(0, 5, flightID));
     }
 }

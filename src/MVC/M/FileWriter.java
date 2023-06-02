@@ -1,7 +1,6 @@
 package MVC.M;
 
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.RandomAccessFile;
 import java.util.LinkedList;
@@ -13,17 +12,12 @@ public class FileWriter {
     protected RandomAccessFile randFile;
 
     public FileWriter(long recordSize, String path) {
-        this.dataFile = new File(path);
-        if (dataFile.exists()) dataFile.delete();
         try {
-            dataFile.createNewFile();
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
-
-        try {
+            dataFile = new File(path);
+            dataFile.delete();
             randFile = new RandomAccessFile(dataFile, "rw");
-        } catch (FileNotFoundException e) {
+        } catch (IOException e) {
+            System.out.println("MAKE SURE A FOLDER NAMED \"Data\" IS AVAILABLE IN CURRENT FOLDER");
             throw new RuntimeException(e);
         }
         this.RECORD_SIZE = recordSize;
@@ -39,7 +33,7 @@ public class FileWriter {
             randFile.writeBytes(dataLine);
             return true;
         } catch (IOException e) {
-            return false;
+            throw new RuntimeException(e);
         }
     }
 
@@ -56,8 +50,9 @@ public class FileWriter {
     protected List<String> readAllRecords() throws IOException {
         randFile.seek(0);
         List<String> allRecords = new LinkedList<>();
-        for (int i = 0; i < getRecordAmount(); i++) {
-            allRecords.add(readRecord(i));
+        int recordCount = getRecordAmount();
+        for (int i = 0; i < recordCount; i++) {
+            allRecords.add(readRecord(i + 1));
         }
         return allRecords;
     }
@@ -93,22 +88,27 @@ public class FileWriter {
     protected int findFieldSpecific(int relativeIdx, int fieldSize, String matchingLine) throws IOException {
         for (int i = 0; i < getRecordAmount(); i++) {
             randFile.seek(i * RECORD_SIZE + relativeIdx);
-            if (byteToString(fieldSize).equals(matchingLine)) return i + 1;
+            if (byteToString(fieldSize).strip().equals(matchingLine)) return i + 1;
         }
         return -1;
     }
 
     protected void removeDataLine(int idx) throws IOException {
         File tempFile = new File("TEMP" + dataFile.getName());
+
+        if (tempFile.exists())
+            if (tempFile.delete()) System.out.println("AH YES DADDY");
+
         RandomAccessFile randTempFile = new RandomAccessFile(tempFile, "rw");
-        if (!tempFile.createNewFile()) System.exit(85);
 
         randFile.seek(0);
         for (int i = 0; i < (idx - 1) * RECORD_SIZE; i++) {
             randTempFile.writeByte(randFile.read());
         }
         randFile.seek(randFile.getFilePointer() + RECORD_SIZE);
-        for (int i = 0; i < randFile.length() - tempFile.length(); i++) {
+
+        int remaining = (int) (randFile.length() - randFile.getFilePointer());
+        for (int i = 0; i < remaining; i++) {
             randTempFile.writeByte(randFile.read());
         }
 
@@ -117,11 +117,10 @@ public class FileWriter {
 
         if (dataFile.delete())
             if (tempFile.renameTo(dataFile)) {
-                dataFile = tempFile;
                 randFile = new RandomAccessFile(dataFile, "rw");
                 return;
             }
 
-        System.exit(85);
+        System.exit(5896);
     }
 }

@@ -14,7 +14,7 @@ public class Users extends FileWriter {
     }
 
     public Users() {
-        super(User.USER_SIZE, "Users.dat");
+        super(User.USER_SIZE, ".\\Data\\Users.dat");
     }
 
     public static User makeTempUser(String username, String password) {
@@ -53,7 +53,7 @@ public class Users extends FileWriter {
     public boolean reduceUserBalance(String username, double price) throws IOException {
         User temp = findUser(username);
         if (temp.getBalance() >= price) {
-            temp.changeBalance(-price);
+            overrideUser(temp.changeBalance(-price));
             return true;
         } else return false;
     }

@@ -30,10 +30,10 @@ public class Root {
         try {
             users.addUserBalance(tickets.findTicket(ticketID).username(), flights.returnFlightPrice(tickets.findTicket(ticketID).flightID()));
             flights.overrideFlight(flights.getFlight(tickets.findTicket(ticketID).flightID()).changeAvailableSeats(1));
+            tickets.removeTicket(ticketID);
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
-        tickets.removeTicket(ticketID);
     }
 
     public void removeFlight(String flightID) {

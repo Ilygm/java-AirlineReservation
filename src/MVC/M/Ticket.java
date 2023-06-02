@@ -1,7 +1,7 @@
 package MVC.M;
 
 public record Ticket(String flightID, String username, String ticketID) {
-    public static long TICKET_SIZE = 42;
+    public static long TICKET_SIZE = 43;
 
     @Override
     public boolean equals(Object o) {
@@ -16,10 +16,10 @@ public record Ticket(String flightID, String username, String ticketID) {
 
     @Override
     public String toString() {
-        return String.format("[ %36c%s --> %s ] ==> %s", ' ',ticketID, username, flightID);
+        return String.format("%36c[ %s --> %s ] ==> %s", ' ',ticketID, username, flightID);
     }
 
     public String turnToDataLine() {
-        return String.format("%5s|%15s|%20s", flightID, username, ticketID);
+        return String.format("%5s|%15s|%20s\n", flightID, username, ticketID);
     }
 }

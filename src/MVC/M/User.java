@@ -1,7 +1,7 @@
 package MVC.M;
 
 public class User {
-    public static long USER_SIZE = 57;
+    public static long USER_SIZE = 63;
     public static long USERNAME_SIZE = 15;
     private final String username;
     private String password;
@@ -46,6 +46,6 @@ public class User {
     }
 
     public String userToDataLine() {
-        return String.format("%15s|%25s|%15s", username, password, balance);
+        return String.format("%15s|%25s|%20s\n", username, password, balance);
     }
 }

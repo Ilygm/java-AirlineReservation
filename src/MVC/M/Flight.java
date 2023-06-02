@@ -1,7 +1,7 @@
 package MVC.M;
 
 public class Flight {
-    public static long FLIGHT_SIZE = 90;
+    public static long FLIGHT_SIZE = 91;
     public static long FLIGHT_ID_SIZE = 5;
     private final String flightID;
     private String origin;
@@ -22,7 +22,7 @@ public class Flight {
     }
 
     public String flightToDataLine() {
-        return String.format("%5s|%25s|%25s|%10s|%5s|%4s|%10s", flightID, origin, destination, date, availableSeats, time, price);
+        return String.format("%5s|%25s|%25s|%10s|%5s|%4s|%10s\n", flightID, origin, destination, date, time, availableSeats, price);
     }
 
     public String getFlightID() {
